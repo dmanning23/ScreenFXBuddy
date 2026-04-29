@@ -28,19 +28,32 @@ Multiple instances of distortion effects (ForceRipple, GravityWave) can be activ
 Add the component in your `Game` constructor:
 
 ```csharp
-var screenFX = new ScreenFXComponent(this);
-Components.Add(screenFX);
+_screenFX = new ScreenFXComponent(this);
+Components.Add(_screenFX);
+```
+
+Wrap your `Draw` method with `BeginCapture` / `EndCapture` so the component can intercept the scene:
+
+```csharp
+protected override void Draw(GameTime gameTime)
+{
+    _screenFX.BeginCapture();
+
+    GraphicsDevice.Clear(Color.Black);
+    // draw your scene here
+
+    _screenFX.EndCapture();
+    base.Draw(gameTime);
+}
 ```
 
 Trigger effects from anywhere in game code:
 
 ```csharp
-screenFX.TriggerForceRipple(hitPosition);
-screenFX.TriggerScreenShake(trauma: 0.8f);
-screenFX.TriggerHitFlash(Color.White);
+_screenFX.TriggerForceRipple(hitPosition);
+_screenFX.TriggerScreenShake(trauma: 0.8f);
+_screenFX.TriggerHitFlash(Color.White);
 ```
-
-The component hooks into the draw pipeline automatically — no changes to your `Draw` method needed.
 
 ## How It Works
 
