@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ScreenFXBuddy.Effects;
@@ -11,6 +13,7 @@ public class ScreenFXComponent : DrawableGameComponent
     private RenderTarget2D _sceneTarget;
     private RenderTarget2D _pingTarget;
     private RenderTarget2D _pongTarget;
+    private bool _capturing;
 
     public List<IDistortionLayer> DistortionLayers { get; } = new();
     public List<IOverlayLayer> OverlayLayers { get; } = new();
@@ -60,11 +63,15 @@ public class ScreenFXComponent : DrawableGameComponent
 
     public void BeginCapture()
     {
+        _capturing = true;
         GraphicsDevice.SetRenderTarget(_sceneTarget);
     }
 
     public void EndCapture()
     {
+        if (!_capturing) return;
+        _capturing = false;
+
         // Ping-pong through distortion layers.
         // source starts at _sceneTarget; we alternate writing to _pingTarget / _pongTarget.
         var source  = _sceneTarget;
@@ -127,6 +134,9 @@ public class ScreenFXComponent : DrawableGameComponent
             _pingTarget?.Dispose();
             _pongTarget?.Dispose();
             _spriteBatch?.Dispose();
+
+            foreach (var layer in DistortionLayers.OfType<IDisposable>()) layer.Dispose();
+            foreach (var layer in OverlayLayers.OfType<IDisposable>()) layer.Dispose();
         }
         base.Dispose(disposing);
     }
