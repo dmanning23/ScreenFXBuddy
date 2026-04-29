@@ -8,7 +8,7 @@ public class HeatHazeLayer : IDistortionLayer
 {
     private readonly GraphicsDevice _graphicsDevice;
     private Effect _effect;
-    private float _intensity;
+    private float _intensity; // passed to shader when wired
     private float _remaining;
 
     public bool IsActive => _remaining > 0f;
