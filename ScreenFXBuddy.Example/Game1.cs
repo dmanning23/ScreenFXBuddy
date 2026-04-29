@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,43 +8,70 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private ScreenFXComponent _screenFX;
+    private KeyboardState _prevKeys;
 
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+
+        _screenFX = new ScreenFXComponent(this);
+        Components.Add(_screenFX);
     }
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
-
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        var keys = Keyboard.GetState();
 
-        // TODO: Add your update logic here
+        if (keys.IsKeyDown(Keys.Escape)) Exit();
 
+        var center = new Vector2(0.5f, 0.5f);
+
+        if (keys.IsKeyDown(Keys.D1) && !_prevKeys.IsKeyDown(Keys.D1))
+            _screenFX.TriggerForceRipple(center);
+
+        if (keys.IsKeyDown(Keys.D2) && !_prevKeys.IsKeyDown(Keys.D2))
+            _screenFX.TriggerGravityWave(center);
+
+        if (keys.IsKeyDown(Keys.D3) && !_prevKeys.IsKeyDown(Keys.D3))
+            _screenFX.TriggerScreenShake(0.8f);
+
+        if (keys.IsKeyDown(Keys.D4) && !_prevKeys.IsKeyDown(Keys.D4))
+            _screenFX.TriggerChromaticAberration(1f, 2f);
+
+        if (keys.IsKeyDown(Keys.D5) && !_prevKeys.IsKeyDown(Keys.D5))
+            _screenFX.TriggerHeatHaze(1f, 2f);
+
+        if (keys.IsKeyDown(Keys.D6) && !_prevKeys.IsKeyDown(Keys.D6))
+            _screenFX.TriggerHitFlash(Color.White, 0.5f);
+
+        if (keys.IsKeyDown(Keys.D7) && !_prevKeys.IsKeyDown(Keys.D7))
+            _screenFX.TriggerAnimeSuper(Color.White, 1f);
+
+        _prevKeys = keys;
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        _screenFX.BeginCapture();
 
-        // TODO: Add your drawing code here
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+        // TODO: draw game scene here
+
+        _screenFX.EndCapture();
 
         base.Draw(gameTime);
     }
