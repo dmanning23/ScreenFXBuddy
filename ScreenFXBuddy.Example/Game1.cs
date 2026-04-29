@@ -7,7 +7,6 @@ namespace ScreenFXBuddy.Example;
 public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
     private ScreenFXComponent _screenFX;
     private KeyboardState _prevKeys;
 
@@ -24,11 +23,6 @@ public class Game1 : Game
     protected override void Initialize()
     {
         base.Initialize();
-    }
-
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
     }
 
     protected override void Update(GameTime gameTime)
