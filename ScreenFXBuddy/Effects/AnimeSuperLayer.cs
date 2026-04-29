@@ -43,7 +43,7 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
-        float alpha = _remaining / _duration;
+        float alpha = _duration > 0f ? _remaining / _duration : 0f;
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);
