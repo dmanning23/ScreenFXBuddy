@@ -1,15 +1,19 @@
 // ============================================================================
 // Distorter_Ripple.fx
-// Water ripple distortion shader for WaterRippleBuddy.
+// Force-ripple / shockwave distortion shader for ScreenFXBuddy.
 //
-// Supports up to MAX_DROPLETS simultaneous ripples in a single pass.
-// Each droplet is a sinusoidal wave that radiates outward, attenuates with
-// distance and age, and applies:
-//   - Refraction : UV offset to distort the scene beneath the wave
-//   - Reflection : color tint at wave crests
+// Each active ripple is described as a ring:
+//   RipplePositions[i].xy  — UV-space center
+//   RippleRings[i].x       — outer radius (UV)
+//   RippleRings[i].y       — inner radius (UV)
+//   RippleRings[i].z       — strength (UV displacement at the ring crest)
 //
-// This file is compiled by the consuming game's content pipeline (MGCB).
-// Add it to your Content/Content.mgcb with an EffectImporter/EffectProcessor.
+// The C# layer (ForceRippleLayer) computes outer/inner radius each frame from
+// the ripple's current age, speed, and size.  This shader does not need to
+// know anything about time or wave frequency — it only draws rings.
+//
+// Using float4 for both arrays avoids float2/float3 packing quirks in some
+// GLSL drivers; just ignore the unused components.
 // ============================================================================
 
 #if OPENGL
@@ -21,22 +25,12 @@
     #define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-#define MAX_DROPLETS 16
+#define MAX_RIPPLES 16
 
-// ── Droplet data ─────────────────────────────────────────────────────────────
-// Each element: xy = normalized screen position [0,1],
-//               z  = normalized age [0,1]  (0 = just spawned, 1 = expired),
-//               w  = per-instance strength multiplier
-float4 DropletData[MAX_DROPLETS];
-float  DropletCount;        // passed as float to avoid int-uniform driver quirks
-
-// ── Wave parameters ───────────────────────────────────────────────────────────
-float WaveSpeed;            // how fast the wave pattern travels outward
-float WaveFrequency;        // controls ring spacing (radians per UV unit)
-float RefractionStrength;   // UV displacement scale
-float ReflectionStrength;   // reflection tint blend factor
-float3 ReflectionColor;     // color blended in at wave crests
-float AspectRatio;          // viewport width / height (corrects circular waves)
+float  RippleCount;                     // passed as float to avoid int-uniform driver quirks
+float4 RipplePositions[MAX_RIPPLES];    // xy = UV-space center, zw unused
+float4 RippleRings[MAX_RIPPLES];        // x = outerRadius, y = innerRadius, z = strength, w unused
+float  AspectRatio;                     // viewport width / height (corrects circular rings)
 
 // ── Scene texture (bound by SpriteBatch) ─────────────────────────────────────
 Texture2D SceneTexture;
@@ -62,60 +56,43 @@ struct VertexShaderOutput
 float4 PS(VertexShaderOutput input) : COLOR
 {
     float2 uv = input.TexCoord;
-
     float2 totalDisplacement = float2(0.0, 0.0);
-    float  totalIntensity    = 0.0;
 
-    int count = (int)DropletCount;
+    int count = (int)RippleCount;
 
     for (int i = 0; i < count; i++)
     {
-        float2 dropPos  = DropletData[i].xy;
-        float  age      = DropletData[i].z;   // [0, 1]
-        float  strength = DropletData[i].w;   // per-instance multiplier
+        float2 center = RipplePositions[i].xy;
+        float  outerR  = RippleRings[i].x;
+        float  innerR  = RippleRings[i].y;
+        float  strength = RippleRings[i].z;
 
-        // ── Distance (aspect-corrected so ripples are circular) ──────────────
-        float2 delta = uv - dropPos;
+        // Aspect-correct the delta so distance forms a circle, not an ellipse
+        float2 delta = uv - center;
         delta.x *= AspectRatio;
         float dist = length(delta);
 
-        // ── Traveling wave ───────────────────────────────────────────────────
-        // sin(dist * freq - age * speed * freq) produces a ring that moves
-        // outward as age increases.  Two decay terms:
-        //   exp(-dist * k)  →  waves attenuate as they spread
-        //   exp(-age  * k)  →  waves fade as they age
-        float phase = dist * WaveFrequency - age * WaveSpeed * WaveFrequency;
-        float wave  = sin(phase)
-                    * exp(-dist * 4.0)
-                    * exp(-age  * 4.0);
-
-        // ── Radial displacement direction ────────────────────────────────────
-        float2 dir = float2(0.0, 0.0);
-        if (dist > 0.001)
+        if (dist >= innerR && dist <= outerR && dist > 0.001)
         {
-            dir   = normalize(delta);
-            dir.x /= AspectRatio;   // un-correct back to UV space
-        }
+            // Normalize position within the ring band to [0,1]
+            float t = (dist - innerR) / (outerR - innerR);
+            // sin(t*pi) peaks at the ring centre and falls smoothly to zero at both edges
+            float wave = sin(t * 3.14159265);
 
-        totalDisplacement += dir * wave * strength;
-        totalIntensity    += abs(wave) * strength;
+            // Radial displacement direction, un-corrected back to UV space
+            float2 dir = normalize(delta);
+            dir.x /= AspectRatio;
+
+            totalDisplacement += dir * wave * strength;
+        }
     }
 
-    // ── Refraction ───────────────────────────────────────────────────────────
-    float2 refractedUV = uv + totalDisplacement * RefractionStrength;
-    refractedUV = clamp(refractedUV, float2(0.0, 0.0), float2(1.0, 1.0));
-
-    float4 sceneColor = tex2D(SceneSampler, refractedUV);
-
-    // ── Reflection ───────────────────────────────────────────────────────────
-    float  reflFactor = saturate(totalIntensity * ReflectionStrength);
-    float3 finalRGB   = lerp(sceneColor.rgb, ReflectionColor, reflFactor);
-
-    return float4(finalRGB, sceneColor.a) * input.Color;
+    float2 refractedUV = clamp(uv + totalDisplacement, 0.0, 1.0);
+    return tex2D(SceneSampler, refractedUV) * input.Color;
 }
 
 // ── Technique ────────────────────────────────────────────────────────────────
-technique WaterRipple
+technique ForceRipple
 {
     pass P0
     {

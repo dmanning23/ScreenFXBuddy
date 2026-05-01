@@ -13,6 +13,7 @@ public class RippleInstance
 {
     /// <summary>
     /// The screen position of the center of this ripple
+    /// This is measured in the x/y pixel coordinates
     /// </summary>
     public Vector2 Position { get; set; }
 
@@ -49,7 +50,7 @@ public class RippleInstance
     /// </summary>
     public bool IsAlive => Timer.HasTimeRemaining;
 
-    public RippleInstance(Vector2 position, float strength = 5f, float speed = 25f, float size = 10f, float time = 2f)
+    public RippleInstance(Vector2 position, float strength = 0.05f, float speed = 0.4f, float size = 0.08f, float time = 2f)
     {
         Position = position;
         Strength = strength;

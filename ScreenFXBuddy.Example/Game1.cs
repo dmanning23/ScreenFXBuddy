@@ -53,7 +53,7 @@ public class Game1 : Game
         var center = new Vector2(0.5f, 0.5f);
 
         if (keys.IsKeyDown(Keys.D1) && !_prevKeys.IsKeyDown(Keys.D1))
-            _screenFX.TriggerForceRipple(center);
+            _screenFX.TriggerForceRipple(new Vector2(1280/2, 720/2));
 
         if (keys.IsKeyDown(Keys.D2) && !_prevKeys.IsKeyDown(Keys.D2))
             _screenFX.TriggerGravityWave(center);
@@ -72,6 +72,44 @@ public class Game1 : Game
 
         if (keys.IsKeyDown(Keys.D7) && !_prevKeys.IsKeyDown(Keys.D7))
             _screenFX.TriggerAnimeSuper(Color.White, 1f);
+
+        //TODO: Test several different screen shakes
+        if (keys.IsKeyDown(Keys.Q) && !_prevKeys.IsKeyDown(Keys.Q))
+            _screenFX.TriggerScreenShake(2f, 0.5f, 0.3f);
+
+        if (keys.IsKeyDown(Keys.W) && !_prevKeys.IsKeyDown(Keys.W))
+            _screenFX.TriggerScreenShake(0.5f, 0.1f, 0.05f);
+
+        if (keys.IsKeyDown(Keys.E) && !_prevKeys.IsKeyDown(Keys.E))
+            _screenFX.TriggerScreenShake(1f, 1f, 0.6f);
+
+        if (keys.IsKeyDown(Keys.R) && !_prevKeys.IsKeyDown(Keys.R))
+            _screenFX.TriggerScreenShake(0.1f, 0.05f, 0.1f);
+
+        //Test several different ripple effetcs
+        if (keys.IsKeyDown(Keys.A) && !_prevKeys.IsKeyDown(Keys.A))
+            _screenFX.TriggerForceRipple(new Vector2(256, 256), 0.1f, 0.4f, 0.08f, 2f);
+
+        if (keys.IsKeyDown(Keys.S) && !_prevKeys.IsKeyDown(Keys.S))
+            _screenFX.TriggerForceRipple(new Vector2(1280 - 256, 256), 0.05f, 0.8f, 0.08f, 2f);
+
+        if (keys.IsKeyDown(Keys.D) && !_prevKeys.IsKeyDown(Keys.D))
+            _screenFX.TriggerForceRipple(new Vector2(256, 720 - 256), 0.05f, 0.4f, 0.16f, 2f);
+
+        if (keys.IsKeyDown(Keys.F) && !_prevKeys.IsKeyDown(Keys.F))
+            _screenFX.TriggerForceRipple(new Vector2(1280 - 256, 720 - 256), 0.05f, 0.4f, 0.08f, 4f);
+
+        if (keys.IsKeyDown(Keys.G) && !_prevKeys.IsKeyDown(Keys.G))
+            _screenFX.TriggerForceRipple(new Vector2(256, 256), 0.025f, 0.4f, 0.08f, 2f);
+
+        if (keys.IsKeyDown(Keys.H) && !_prevKeys.IsKeyDown(Keys.H))
+            _screenFX.TriggerForceRipple(new Vector2(1280 - 256, 256), 0.05f, 0.2f, 0.08f, 2f);
+
+        if (keys.IsKeyDown(Keys.J) && !_prevKeys.IsKeyDown(Keys.J))
+            _screenFX.TriggerForceRipple(new Vector2(256, 720 - 256), 0.05f, 0.4f, 0.04f, 2f);
+
+        if (keys.IsKeyDown(Keys.K) && !_prevKeys.IsKeyDown(Keys.K))
+            _screenFX.TriggerForceRipple(new Vector2(1280 - 256, 720 - 256), 0.05f, 0.4f, 0.08f, 1f);
 
         _prevKeys = keys;
         base.Update(gameTime);
