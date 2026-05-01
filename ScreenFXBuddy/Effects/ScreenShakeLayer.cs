@@ -158,12 +158,22 @@ public class ScreenShakeLayer : IDistortionLayer
             ? 1f
             : WholeTimer.RemainingTime / _wholeDuration;
 
-        float uvAmount = ShakeAmount * UvScale * fade;
+        var totalShake = UvScale * fade * ShakeAmount;
 
-        // Alternate diagonal direction each pulse for a more dynamic feel.
-        var offset = ShakeLeft
-            ? new Vector2(-uvAmount, uvAmount * 0.5f)
-            : new Vector2(uvAmount, -uvAmount * 0.5f);
+        //figure out the proper rotation for the camera shake
+        var shakeX = (totalShake *
+            (float)Math.Sin(
+            ((ShakeTimer.CurrentTime * (2.0f * Math.PI)) /
+            ShakeTimer.CountdownLength)));
+
+        var shakeY = (totalShake *
+            (float)Math.Cos(
+            ((ShakeTimer.CurrentTime * (2.0f * Math.PI)) /
+            ShakeTimer.CountdownLength)));
+
+        shakeX = shakeX * (ShakeLeft ? -1.0f : 1.0f);
+
+        var offset = new Vector2(shakeX, shakeY);
 
         _graphicsDevice.SetRenderTarget(destination);
         _pOffset.SetValue(offset);
