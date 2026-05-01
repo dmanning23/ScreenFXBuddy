@@ -116,8 +116,12 @@ public class ScreenFXComponent : DrawableGameComponent
     public void TriggerHeatHaze(float intensity, float duration)
         => HeatHaze.Trigger(intensity, duration);
 
-    public void TriggerHitFlash(Color color, float duration)
-        => HitFlash.Trigger(color, duration);
+    public void TriggerHitFlash(Color blendColor,
+        FadeMode mode = FadeMode.FadeOut,
+        FadeCurve curve = FadeCurve.Linear,
+        FlashBlendMode blendMode = FlashBlendMode.LinearDodge,
+        float time = 1f)
+        => HitFlash.Trigger(blendColor, mode, curve, blendMode, time);
 
     public void TriggerAnimeSuper(Color color, float duration)
         => AnimeSuper.Trigger(color, duration);
