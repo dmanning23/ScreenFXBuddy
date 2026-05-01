@@ -21,7 +21,7 @@ public class ChromaticAberrationLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect = content.Load<Effect>("Debug_Red");
+        _effect = content.Load<Effect>("Debug_Color");
     }
 
     public void Trigger(float intensity, float duration)
@@ -39,6 +39,8 @@ public class ChromaticAberrationLayer : IDistortionLayer
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
         _graphicsDevice.SetRenderTarget(destination);
+
+        _effect.Parameters["DebugColor"].SetValue(Color.Orange.ToVector4());
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);

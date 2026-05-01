@@ -40,7 +40,7 @@ public class Game1 : Game
             _screenFX.TriggerGravityWave(center);
 
         if (keys.IsKeyDown(Keys.D3) && !_prevKeys.IsKeyDown(Keys.D3))
-            _screenFX.TriggerScreenShake(0.8f);
+            _screenFX.TriggerScreenShake();
 
         if (keys.IsKeyDown(Keys.D4) && !_prevKeys.IsKeyDown(Keys.D4))
             _screenFX.TriggerChromaticAberration(1f, 2f);

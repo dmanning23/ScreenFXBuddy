@@ -23,7 +23,7 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
 
     public void LoadContent(ContentManager content)
     {
-        _effect = content.Load<Effect>("Debug_Red");
+        _effect = content.Load<Effect>("Debug_Color");
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
         _whitePixel.SetData(new[] { Color.White });
     }
@@ -44,6 +44,8 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
     public void Apply(SpriteBatch spriteBatch)
     {
         float alpha = _duration > 0f ? _remaining / _duration : 0f;
+
+        _effect.Parameters["DebugColor"].SetValue(Color.Red.ToVector4());
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);

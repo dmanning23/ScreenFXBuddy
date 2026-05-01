@@ -7,6 +7,8 @@
     #define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
+float4 DebugColor;
+
 struct VertexShaderOutput
 {
     float4 Position : SV_POSITION;
@@ -16,7 +18,7 @@ struct VertexShaderOutput
 
 float4 PS(VertexShaderOutput input) : COLOR
 {
-    return float4(1, 0, 0, 1);
+    return DebugColor;
 }
 
 technique DebugRed

@@ -22,7 +22,7 @@ public class GravityWaveLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect = content.Load<Effect>("Debug_Red");
+        _effect = content.Load<Effect>("Debug_Color");
     }
 
     public void Trigger(Vector2 position, float strength = 1f)
@@ -48,6 +48,8 @@ public class GravityWaveLayer : IDistortionLayer
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
         _graphicsDevice.SetRenderTarget(destination);
+        
+        _effect.Parameters["DebugColor"].SetValue(Color.Green.ToVector4());
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);

@@ -24,7 +24,7 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
 
     public void LoadContent(ContentManager content)
     {
-        _effect = content.Load<Effect>("Debug_Red");
+        _effect = content.Load<Effect>("Debug_Color");
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
         _whitePixel.SetData(new[] { Color.White });
     }
@@ -54,6 +54,8 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
         foreach (var flash in _instances)
         {
             float alpha = flash.Remaining / flash.Duration;
+
+            _effect.Parameters["DebugColor"].SetValue(Color.Indigo.ToVector4());
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
                 SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
                 _effect);

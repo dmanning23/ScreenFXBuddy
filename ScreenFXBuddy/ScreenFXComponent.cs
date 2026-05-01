@@ -34,16 +34,16 @@ public class ScreenFXComponent : DrawableGameComponent
 
         var pp = GraphicsDevice.PresentationParameters;
         _sceneTarget = CreateTarget(pp);
-        _pingTarget  = CreateTarget(pp);
-        _pongTarget  = CreateTarget(pp);
+        _pingTarget = CreateTarget(pp);
+        _pongTarget = CreateTarget(pp);
 
-        ForceRipple          = new ForceRippleLayer(GraphicsDevice);
-        GravityWave          = new GravityWaveLayer(GraphicsDevice);
-        ScreenShake          = new ScreenShakeLayer(GraphicsDevice);
-        ChromaticAberration  = new ChromaticAberrationLayer(GraphicsDevice);
-        HeatHaze             = new HeatHazeLayer(GraphicsDevice);
-        HitFlash             = new HitFlashLayer(GraphicsDevice);
-        AnimeSuper           = new AnimeSuperLayer(GraphicsDevice);
+        ForceRipple = new ForceRippleLayer(GraphicsDevice);
+        GravityWave = new GravityWaveLayer(GraphicsDevice);
+        ScreenShake = new ScreenShakeLayer(GraphicsDevice);
+        ChromaticAberration = new ChromaticAberrationLayer(GraphicsDevice);
+        HeatHaze = new HeatHazeLayer(GraphicsDevice);
+        HitFlash = new HitFlashLayer(GraphicsDevice);
+        AnimeSuper = new AnimeSuperLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
             { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze });
@@ -51,13 +51,13 @@ public class ScreenFXComponent : DrawableGameComponent
             { HitFlash, AnimeSuper });
 
         foreach (var layer in DistortionLayers) layer.LoadContent(Game.Content);
-        foreach (var layer in OverlayLayers)    layer.LoadContent(Game.Content);
+        foreach (var layer in OverlayLayers) layer.LoadContent(Game.Content);
     }
 
     public override void Update(GameTime gameTime)
     {
         foreach (var layer in DistortionLayers) layer.Update(gameTime);
-        foreach (var layer in OverlayLayers)    layer.Update(gameTime);
+        foreach (var layer in OverlayLayers) layer.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -74,7 +74,7 @@ public class ScreenFXComponent : DrawableGameComponent
 
         // Ping-pong through distortion layers.
         // source starts at _sceneTarget; we alternate writing to _pingTarget / _pongTarget.
-        var source  = _sceneTarget;
+        var source = _sceneTarget;
         bool usePing = true;
 
         foreach (var layer in DistortionLayers)
@@ -82,7 +82,7 @@ public class ScreenFXComponent : DrawableGameComponent
             if (!layer.IsActive) continue;
             var dest = usePing ? _pingTarget : _pongTarget;
             layer.Apply(_spriteBatch, source, dest);
-            source  = dest;
+            source = dest;
             usePing = !usePing;
         }
 
@@ -101,14 +101,14 @@ public class ScreenFXComponent : DrawableGameComponent
         }
     }
 
-    public void TriggerForceRipple(Vector2 position, float strength = 1f)
-        => ForceRipple.Trigger(position, strength);
+    public void TriggerForceRipple(Vector2 position, float strength = 5f, float speed = 25f, float size = 10f, float time = 2f)
+        => ForceRipple.Trigger(position, strength, speed, size, time);
 
     public void TriggerGravityWave(Vector2 position, float strength = 1f)
         => GravityWave.Trigger(position, strength);
 
-    public void TriggerScreenShake(float trauma)
-        => ScreenShake.Trigger(trauma);
+    public void TriggerScreenShake(float length = 1f, float delta = 0.1f, float amount = 0.1f)
+        => ScreenShake.Trigger(length, delta, amount);
 
     public void TriggerChromaticAberration(float intensity, float duration)
         => ChromaticAberration.Trigger(intensity, duration);
