@@ -13,8 +13,33 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../ScreenFXBuddy/Content/Distorter_Ripple.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_Ripple.fx;Distorter_Ripple.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_ScreenShake.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ScreenShake.fx;Distorter_ScreenShake.fx
+
+#begin Braid_screenshot8.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Braid_screenshot8.jpg
+
 #begin Debug_Color.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Debug_Color.fx
+

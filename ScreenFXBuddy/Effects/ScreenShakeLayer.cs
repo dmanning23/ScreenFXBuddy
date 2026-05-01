@@ -13,8 +13,16 @@ public class ScreenShakeLayer : IDistortionLayer
 {
     private readonly GraphicsDevice _graphicsDevice;
     private Effect _effect;
+    private EffectParameter _pOffset;
+
+    // UV-space scale applied to ShakeAmount to produce the final offset.
+    // ShakeAmount=1.0 results in a 4% screen-width shake at peak.
+    private const float UvScale = 0.04f;
 
     private float ShakeDelta { get; set; }
+
+    // Tracked so Apply can compute a linear fade-out over the shake duration.
+    private float _wholeDuration;
 
     /// <summary>
     /// this is whether to shake the camera clockwise or counterclockwise
@@ -55,7 +63,8 @@ public class ScreenShakeLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect = content.Load<Effect>("Debug_Color");
+        _effect = content.Load<Effect>("Distorter_ScreenShake");
+        _pOffset = _effect.Parameters["Offset"];
     }
 
     /// <summary>
@@ -112,11 +121,13 @@ public class ScreenShakeLayer : IDistortionLayer
         if (length > 0)
         {
             EndlessShake = false;
+            _wholeDuration = length;
             WholeTimer.Start(length);
         }
         else
         {
             EndlessShake = true;
+            _wholeDuration = 0f;
         }
     }
 
@@ -141,11 +152,21 @@ public class ScreenShakeLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
-        //TODO: calculate the entire amount of shake to add to the scene
+        // Linear fade: full strength at start, zero at end.
+        // Endless shake stays at full strength until stopped.
+        float fade = (EndlessShake || _wholeDuration <= 0f)
+            ? 1f
+            : WholeTimer.RemainingTime / _wholeDuration;
+
+        float uvAmount = ShakeAmount * UvScale * fade;
+
+        // Alternate diagonal direction each pulse for a more dynamic feel.
+        var offset = ShakeLeft
+            ? new Vector2(-uvAmount, uvAmount * 0.5f)
+            : new Vector2(uvAmount, -uvAmount * 0.5f);
 
         _graphicsDevice.SetRenderTarget(destination);
-
-        _effect.Parameters["DebugColor"].SetValue(Color.Purple.ToVector4());
+        _pOffset.SetValue(offset);
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);

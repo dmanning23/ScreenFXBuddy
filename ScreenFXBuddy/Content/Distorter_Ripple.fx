@@ -26,7 +26,7 @@
 // ── Droplet data ─────────────────────────────────────────────────────────────
 // Each element: xy = normalized screen position [0,1],
 //               z  = normalized age [0,1]  (0 = just spawned, 1 = expired),
-//               w  = unused (reserved)
+//               w  = per-instance strength multiplier
 float4 DropletData[MAX_DROPLETS];
 float  DropletCount;        // passed as float to avoid int-uniform driver quirks
 
@@ -70,8 +70,9 @@ float4 PS(VertexShaderOutput input) : COLOR
 
     for (int i = 0; i < count; i++)
     {
-        float2 dropPos = DropletData[i].xy;
-        float  age     = DropletData[i].z;   // [0, 1]
+        float2 dropPos  = DropletData[i].xy;
+        float  age      = DropletData[i].z;   // [0, 1]
+        float  strength = DropletData[i].w;   // per-instance multiplier
 
         // ── Distance (aspect-corrected so ripples are circular) ──────────────
         float2 delta = uv - dropPos;
@@ -96,8 +97,8 @@ float4 PS(VertexShaderOutput input) : COLOR
             dir.x /= AspectRatio;   // un-correct back to UV space
         }
 
-        totalDisplacement += dir * wave;
-        totalIntensity    += abs(wave);
+        totalDisplacement += dir * wave * strength;
+        totalIntensity    += abs(wave) * strength;
     }
 
     // ── Refraction ───────────────────────────────────────────────────────────

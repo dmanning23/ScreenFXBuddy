@@ -34,6 +34,12 @@ public class RippleInstance
     public float Size { get; set; }
 
     /// <summary>
+    /// Total lifetime of this ripple in seconds, set at construction time.
+    /// Used to compute normalized age for the shader.
+    /// </summary>
+    public float TotalTime { get; private set; }
+
+    /// <summary>
     /// Used to time the ripple effect from start to finish
     /// </summary>
     public CountdownTimer Timer { get; protected set; } = new CountdownTimer();
@@ -49,6 +55,7 @@ public class RippleInstance
         Strength = strength;
         Speed = speed;
         Size = size;
+        TotalTime = time;
         Timer.Start(time);
     }
 

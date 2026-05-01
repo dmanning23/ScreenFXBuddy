@@ -10,9 +10,20 @@ public class Game1 : Game
     private ScreenFXComponent _screenFX;
     private KeyboardState _prevKeys;
 
+    private SpriteBatch _spriteBatch = null!;
+    private Texture2D _background = null!;
+
+    //Window Size
+    private const int ScreenWidth = 1280;
+    private const int ScreenHeight = 720;
+
     public Game1()
     {
-        _graphics = new GraphicsDeviceManager(this);
+        _graphics = new GraphicsDeviceManager(this)
+        {
+            PreferredBackBufferWidth = ScreenWidth,
+            PreferredBackBufferHeight = ScreenHeight
+        };
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
@@ -23,6 +34,14 @@ public class Game1 : Game
     protected override void Initialize()
     {
         base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _background = Content.Load<Texture2D>("Braid_screenshot8");
+
+        base.LoadContent();
     }
 
     protected override void Update(GameTime gameTime)
@@ -63,7 +82,11 @@ public class Game1 : Game
         _screenFX.BeginCapture();
 
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        // TODO: draw game scene here
+
+        //draw game scene here
+        _spriteBatch.Begin();
+        _spriteBatch.Draw(_background, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
+        _spriteBatch.End();
 
         _screenFX.EndCapture();
 
