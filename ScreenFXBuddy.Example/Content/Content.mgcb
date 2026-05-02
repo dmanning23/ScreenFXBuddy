@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../ScreenFXBuddy/Content/Distorter_ChromaticAberration.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ChromaticAberration.fx;Distorter_ChromaticAberration.fx
+
 #begin ../../ScreenFXBuddy/Content/Distorter_Ripple.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -24,6 +30,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:../../ScreenFXBuddy/Content/Distorter_ScreenShake.fx;Distorter_ScreenShake.fx
+
+#begin ../../ScreenFXBuddy/Content/Overlay_SpeedLines.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_SpeedLines.fx;Overlay_SpeedLines.fx
 
 #begin Braid_screenshot8.jpg
 /importer:TextureImporter
