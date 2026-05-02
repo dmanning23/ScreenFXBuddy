@@ -106,8 +106,14 @@ public class ScreenFXComponent : DrawableGameComponent
     public void TriggerForceRipple(Vector2 position, float strength = 0.05f, float speed = 0.4f, float size = 0.08f, float time = 2f)
         => ForceRipple.Trigger(position, strength, speed, size, time);
 
-    public void TriggerGravityWave(Vector2 position, float strength = 1f)
-        => GravityWave.Trigger(position, strength);
+    public void TriggerGravityWave(
+        Vector2 position,
+        float strength    = 0.04f,
+        float startHeight = 0.05f,
+        float endHeight   = 0.25f,
+        float speed       = 0.5f,
+        float duration    = 1.5f)
+        => GravityWave.Trigger(position, strength, startHeight, endHeight, speed, duration);
 
     public void TriggerScreenShake(float length = 1f, float delta = 0.1f, float amount = 0.1f)
         => ScreenShake.Trigger(length, delta, amount);
