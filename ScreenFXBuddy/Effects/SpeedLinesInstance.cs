@@ -4,12 +4,18 @@ using Microsoft.Xna.Framework;
 
 namespace ScreenFXBuddy.Effects;
 
+/// <summary>
+/// Controls whether speed lines expand outward from center or appear at full extent immediately.
+/// </summary>
 public enum SpeedLinesMode
 {
     Static,  // lines appear at full intensity immediately
     Expand   // lines expand outward from center over the lifetime
 }
 
+/// <summary>
+/// Tracks per-burst state for a speed lines overlay, computing current alpha and inner radius each frame.
+/// </summary>
 public class SpeedLinesInstance
 {
     public Vector2 PixelPosition { get; }
