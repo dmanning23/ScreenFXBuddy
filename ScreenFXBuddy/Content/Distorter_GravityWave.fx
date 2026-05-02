@@ -95,6 +95,7 @@ float4 PS(VertexShaderOutput input) : COLOR
             float nx  = side * AspectRatio;
             float ny  = -(dy / arcH);
             float len = sqrt(nx * nx + ny * ny);
+            if (len < 0.0001) continue;
             nx /= len;
             ny /= len;
 
