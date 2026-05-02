@@ -113,7 +113,6 @@ public class Game1 : Game
         if (keys.IsKeyDown(Keys.OemCloseBrackets) && !_prevKeys.IsKeyDown(Keys.OemCloseBrackets))
             _screenFX.TriggerChromaticAberration(centerPixels, 1f, 1f, FadeCurve.Exponential);   // right-of-center
 
-
         //Test several different ripple effetcs
         if (keys.IsKeyDown(Keys.A) && !_prevKeys.IsKeyDown(Keys.A))
             _screenFX.TriggerForceRipple(new Vector2(256, 256), 0.1f, 0.4f, 0.08f, 2f);
@@ -147,6 +146,26 @@ public class Game1 : Game
             _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.Multiply, 2f);
         if (keys.IsKeyDown(Keys.M) && !_prevKeys.IsKeyDown(Keys.M))
             _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.Screen, 2f);
+
+        //Test speed lines
+        if (keys.IsKeyDown(Keys.L) && !_prevKeys.IsKeyDown(Keys.L))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Static, FadeMode.FadeOut, FadeCurve.Linear, 128, 0.8f, 1f);
+        if (keys.IsKeyDown(Keys.OemSemicolon) && !_prevKeys.IsKeyDown(Keys.OemSemicolon))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Expand, FadeMode.FadeOut, FadeCurve.Linear, 128, 0.8f, 1f);
+        if (keys.IsKeyDown(Keys.OemComma) && !_prevKeys.IsKeyDown(Keys.OemComma))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Expand, FadeMode.FadeOut, FadeCurve.Logarithmic, 128, 0.8f, 1f);
+        if (keys.IsKeyDown(Keys.OemPeriod) && !_prevKeys.IsKeyDown(Keys.OemPeriod))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Expand, FadeMode.FadeOut, FadeCurve.Exponential, 128, 0.8f, 1f);
+        if (keys.IsKeyDown(Keys.Enter) && !_prevKeys.IsKeyDown(Keys.Enter))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Expand, FadeMode.FadeOut, FadeCurve.Exponential, 128, 0.9f, 0.5f);
+        if (keys.IsKeyDown(Keys.RightShift) && !_prevKeys.IsKeyDown(Keys.RightShift))
+            _screenFX.TriggerSpeedLines(centerPixels, Color.White,
+                SpeedLinesMode.Static, FadeMode.FadeIn, FadeCurve.Logarithmic, 64, 1f, 0.3f);
 
         _prevKeys = keys;
         base.Update(gameTime);
