@@ -52,22 +52,39 @@ public class Game1 : Game
         if (keys.IsKeyDown(Keys.Escape)) Exit();
 
         var center = new Vector2(0.5f, 0.5f);
+        var centerPixels = new Vector2(1280 / 2, 720 / 2);
 
         //Test all the effects to make sure they are plumbed correctly
         if (keys.IsKeyDown(Keys.D1) && !_prevKeys.IsKeyDown(Keys.D1))
-            _screenFX.TriggerForceRipple(new Vector2(1280 / 2, 720 / 2));
+            _screenFX.TriggerForceRipple(centerPixels);
         if (keys.IsKeyDown(Keys.D2) && !_prevKeys.IsKeyDown(Keys.D2))
             _screenFX.TriggerGravityWave(center);
         if (keys.IsKeyDown(Keys.D3) && !_prevKeys.IsKeyDown(Keys.D3))
             _screenFX.TriggerScreenShake();
         if (keys.IsKeyDown(Keys.D4) && !_prevKeys.IsKeyDown(Keys.D4))
-            _screenFX.TriggerChromaticAberration(1f, 2f);
+            _screenFX.TriggerChromaticAberration(new Vector2(0.5f, 0.5f), 1f, 2f);
         if (keys.IsKeyDown(Keys.D5) && !_prevKeys.IsKeyDown(Keys.D5))
             _screenFX.TriggerHeatHaze(1f, 2f);
         if (keys.IsKeyDown(Keys.D6) && !_prevKeys.IsKeyDown(Keys.D6))
             _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.LinearDodge, 2f);
         if (keys.IsKeyDown(Keys.D7) && !_prevKeys.IsKeyDown(Keys.D7))
             _screenFX.TriggerAnimeSuper(Color.White, 1f);
+
+        var screenCenter = new Vector2(ScreenWidth / 2f, ScreenHeight / 2f);
+
+        // Basic expand + fade-out (default)
+        if (keys.IsKeyDown(Keys.D8) && !_prevKeys.IsKeyDown(Keys.D8))
+            _screenFX.TriggerSpeedLines(screenCenter, Color.White);
+
+        // Static lines, fade-in, linear curve
+        if (keys.IsKeyDown(Keys.D9) && !_prevKeys.IsKeyDown(Keys.D9))
+            _screenFX.TriggerSpeedLines(screenCenter, Color.Yellow,
+                SpeedLinesMode.Static, FadeMode.FadeIn, FadeCurve.Linear, 32, 1.0f, 1.5f);
+
+        // Off-center burst, tight radius, many lines
+        if (keys.IsKeyDown(Keys.D0) && !_prevKeys.IsKeyDown(Keys.D0))
+            _screenFX.TriggerSpeedLines(new Vector2(300, 200), Color.Cyan,
+                SpeedLinesMode.Expand, FadeMode.FadeOut, FadeCurve.Exponential, 48, 0.6f, 0.8f);
 
         //Test several different variations of screen shake
         if (keys.IsKeyDown(Keys.Q) && !_prevKeys.IsKeyDown(Keys.Q))
@@ -78,6 +95,20 @@ public class Game1 : Game
             _screenFX.TriggerScreenShake(1f, 1f, 0.6f);
         if (keys.IsKeyDown(Keys.R) && !_prevKeys.IsKeyDown(Keys.R))
             _screenFX.TriggerScreenShake(0.1f, 0.05f, 0.1f);
+
+        //Test different versions of chromatic aberration
+        if (keys.IsKeyDown(Keys.T) && !_prevKeys.IsKeyDown(Keys.T))
+            _screenFX.TriggerChromaticAberration(new Vector2(0.5f, 0.5f), 2f, 2f);
+        if (keys.IsKeyDown(Keys.Y) && !_prevKeys.IsKeyDown(Keys.Y))
+            _screenFX.TriggerChromaticAberration(new Vector2(0.5f, 0.5f), 1f, 4f);
+        if (keys.IsKeyDown(Keys.U) && !_prevKeys.IsKeyDown(Keys.U))
+            _screenFX.TriggerChromaticAberration(new Vector2(0.5f, 0.5f), 0.5f, 2f);
+        if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
+            _screenFX.TriggerChromaticAberration(new Vector2(0.5f, 0.5f), 1f, 1f);
+        if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
+            _screenFX.TriggerChromaticAberration(new Vector2(1f, 0f), 1f, 2f);
+        if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
+            _screenFX.TriggerChromaticAberration(new Vector2(-1f, 0f), 1f, 2f);
 
         //Test several different ripple effetcs
         if (keys.IsKeyDown(Keys.A) && !_prevKeys.IsKeyDown(Keys.A))
