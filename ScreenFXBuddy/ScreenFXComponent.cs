@@ -25,6 +25,7 @@ public class ScreenFXComponent : DrawableGameComponent
     public HeatHazeLayer HeatHaze { get; private set; }
     public HitFlashLayer HitFlash { get; private set; }
     public AnimeSuperLayer AnimeSuper { get; private set; }
+    public SpeedLinesLayer SpeedLines { get; private set; }
 
     public ScreenFXComponent(Game game) : base(game) { }
 
@@ -44,11 +45,12 @@ public class ScreenFXComponent : DrawableGameComponent
         HeatHaze = new HeatHazeLayer(GraphicsDevice);
         HitFlash = new HitFlashLayer(GraphicsDevice);
         AnimeSuper = new AnimeSuperLayer(GraphicsDevice);
+        SpeedLines = new SpeedLinesLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
             { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze });
         OverlayLayers.AddRange(new IOverlayLayer[]
-            { HitFlash, AnimeSuper });
+            { HitFlash, AnimeSuper, SpeedLines });
 
         foreach (var layer in DistortionLayers) layer.LoadContent(Game.Content);
         foreach (var layer in OverlayLayers) layer.LoadContent(Game.Content);
@@ -110,8 +112,8 @@ public class ScreenFXComponent : DrawableGameComponent
     public void TriggerScreenShake(float length = 1f, float delta = 0.1f, float amount = 0.1f)
         => ScreenShake.Trigger(length, delta, amount);
 
-    public void TriggerChromaticAberration(float intensity, float duration)
-        => ChromaticAberration.Trigger(intensity, duration);
+    public void TriggerChromaticAberration(Vector2 direction, float intensity = 1f, float time = 2f)
+        => ChromaticAberration.Trigger(direction, intensity, time);
 
     public void TriggerHeatHaze(float intensity, float duration)
         => HeatHaze.Trigger(intensity, duration);
@@ -125,6 +127,17 @@ public class ScreenFXComponent : DrawableGameComponent
 
     public void TriggerAnimeSuper(Color color, float duration)
         => AnimeSuper.Trigger(color, duration);
+
+    public void TriggerSpeedLines(
+        Vector2 position,
+        Color color,
+        SpeedLinesMode linesMode = SpeedLinesMode.Expand,
+        FadeMode fadeMode        = FadeMode.FadeOut,
+        FadeCurve fadeCurve      = FadeCurve.Logarithmic,
+        int lineCount            = 24,
+        float maxRadius          = 1.0f,
+        float duration           = 1f)
+        => SpeedLines.Trigger(position, color, linesMode, fadeMode, fadeCurve, lineCount, maxRadius, duration);
 
     private RenderTarget2D CreateTarget(PresentationParameters pp) =>
         new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
