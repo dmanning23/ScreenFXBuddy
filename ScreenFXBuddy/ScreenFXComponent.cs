@@ -112,8 +112,8 @@ public class ScreenFXComponent : DrawableGameComponent
     public void TriggerScreenShake(float length = 1f, float delta = 0.1f, float amount = 0.1f)
         => ScreenShake.Trigger(length, delta, amount);
 
-    public void TriggerChromaticAberration(Vector2 direction, float intensity = 1f, float time = 2f)
-        => ChromaticAberration.Trigger(direction, intensity, time);
+    public void TriggerChromaticAberration(Vector2 startPosition, float distance = 0.1f, float time = 2f)
+        => ChromaticAberration.Trigger(startPosition, distance, time);
 
     public void TriggerHeatHaze(float intensity, float duration)
         => HeatHaze.Trigger(intensity, duration);
