@@ -25,8 +25,9 @@ public class SpeedLinesInstance
     public FadeCurve FadeCurve { get; }
     public int LineCount { get; }
     /// <summary>
-    /// Outer radius of the burst in aspect-ratio-corrected UV space.
-    /// A value of 1.0 fills the screen height; horizontal extent is compressed by 1/AspectRatio.
+    /// Outer radius of the burst in corrected UV space (Y axis is the reference).
+    /// 0.5 reaches the top/bottom screen edges. On a 16:9 viewport, use ~0.9 to reach
+    /// left/right edges, or 1.0 for full-screen coverage.
     /// </summary>
     public float MaxRadius { get; }
 
