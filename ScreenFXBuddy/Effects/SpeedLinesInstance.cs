@@ -24,6 +24,10 @@ public class SpeedLinesInstance
     public FadeMode FadeMode { get; }
     public FadeCurve FadeCurve { get; }
     public int LineCount { get; }
+    /// <summary>
+    /// Outer radius of the burst in aspect-ratio-corrected UV space.
+    /// A value of 1.0 fills the screen height; horizontal extent is compressed by 1/AspectRatio.
+    /// </summary>
     public float MaxRadius { get; }
 
     public CountdownTimer Timer { get; } = new CountdownTimer();
