@@ -88,7 +88,7 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
     public void Trigger(Color blendColor,
         FadeMode mode = FadeMode.FadeOut,
         FadeCurve curve = FadeCurve.Linear,
-        FlashBlendMode blendMode = FlashBlendMode.LinearDodge,
+        EffectBlendMode blendMode = EffectBlendMode.LinearDodge,
         float time = 1f)
     {
         _flashes.Add(new HitFlashInstance(blendColor, mode, curve, blendMode, time));
@@ -121,13 +121,13 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
         }
     }
 
-    private static BlendState GetBlendState(FlashBlendMode mode) => mode switch
+    private static BlendState GetBlendState(EffectBlendMode mode) => mode switch
     {
-        FlashBlendMode.Multiply    => _multiplyBlend,
-        FlashBlendMode.ColorBurn   => _colorBurnBlend,
-        FlashBlendMode.LinearBurn  => _linearBurnBlend,
-        FlashBlendMode.Screen      => _screenBlend,
-        FlashBlendMode.ColorDodge  => _colorDodgeBlend,
+        EffectBlendMode.Multiply    => _multiplyBlend,
+        EffectBlendMode.ColorBurn   => _colorBurnBlend,
+        EffectBlendMode.LinearBurn  => _linearBurnBlend,
+        EffectBlendMode.Screen      => _screenBlend,
+        EffectBlendMode.ColorDodge  => _colorDodgeBlend,
         _                          => _linearDodgeBlend
     };
 

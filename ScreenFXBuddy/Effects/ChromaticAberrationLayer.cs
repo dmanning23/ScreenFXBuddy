@@ -1,4 +1,5 @@
 using GameTimer;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,8 +10,18 @@ public class ChromaticAberrationLayer : IDistortionLayer
 {
     private readonly GraphicsDevice _graphicsDevice;
     private Effect _effect;
-    private Vector2 _startPosition; // screen-pixel coords, converted to UV in Apply
-    private float _distance;        // max UV spread Distance at end of effect
+
+    /// <summary>
+    /// screen-pixel coords, converted to UV in Apply
+    /// </summary>
+    private Vector2 _startPosition;
+
+    /// <summary>
+    /// max UV spread Distance at end of effect
+    /// </summary>
+    private float _distance;
+
+    public FadeCurve FadeCurve { get; set; }
 
     protected CountdownTimer Timer { get; set; } = new CountdownTimer();
 
@@ -28,11 +39,12 @@ public class ChromaticAberrationLayer : IDistortionLayer
 
     /// <param name="startPosition">Screen-pixel position the aberration radiates from.</param>
     /// <param name="distance">Max UV-space channel spread at end of effect. Try 0.05–0.2.</param>
-    /// <param name="time">Duration in seconds.</param>
-    public void Trigger(Vector2 startPosition, float distance = 0.1f, float time = 2f)
+    /// <param name="time">Duration in seconds.</param>4
+    public void Trigger(Vector2 startPosition, float distance = 1f, float time = 2f, FadeCurve fadeCurve = FadeCurve.Linear)
     {
         _startPosition = startPosition;
         _distance = distance;
+        FadeCurve = fadeCurve;
         Timer.Start(time);
     }
 
@@ -40,6 +52,13 @@ public class ChromaticAberrationLayer : IDistortionLayer
     {
         Timer.Update(gameTime);
     }
+
+    private float ApplyCurve(float t) => FadeCurve switch
+    {
+        FadeCurve.Logarithmic => MathF.Log(1f + t * (MathF.E - 1f)),
+        FadeCurve.Exponential => t * t,
+        _ => t
+    };
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
@@ -49,9 +68,10 @@ public class ChromaticAberrationLayer : IDistortionLayer
             _startPosition.Y / viewport.Height);
 
         // Distance grows from 0 → _distance as the timer counts down.
-        float currentDistance = _distance * (1f - Timer.Lerp);
+        float currentDistance = _distance * ApplyCurve(1f - Timer.Lerp);
+
         // Strength fades from 1 → 0 as the timer counts down.
-        float currentStrength = 1f; //Timer.Lerp;
+        float currentStrength = ApplyCurve(Timer.Lerp);
 
         _graphicsDevice.SetRenderTarget(destination);
         _effect.Parameters["Origin"].SetValue(originUV);

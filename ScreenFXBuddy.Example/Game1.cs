@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ScreenFXBuddy;
 using ScreenFXBuddy.Effects;
 
 namespace ScreenFXBuddy.Example;
@@ -66,7 +67,7 @@ public class Game1 : Game
         if (keys.IsKeyDown(Keys.D5) && !_prevKeys.IsKeyDown(Keys.D5))
             _screenFX.TriggerHeatHaze(1f, 2f);
         if (keys.IsKeyDown(Keys.D6) && !_prevKeys.IsKeyDown(Keys.D6))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.LinearDodge, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.LinearDodge, 2f);
         if (keys.IsKeyDown(Keys.D7) && !_prevKeys.IsKeyDown(Keys.D7))
             _screenFX.TriggerAnimeSuper(Color.White, 1f);
 
@@ -96,17 +97,22 @@ public class Game1 : Game
 
         //Test different versions of chromatic aberration
         if (keys.IsKeyDown(Keys.T) && !_prevKeys.IsKeyDown(Keys.T))
-            _screenFX.TriggerChromaticAberration(centerPixels, 0.2f, 2f);
+            _screenFX.TriggerChromaticAberration(centerPixels, 0.5f, 2f);
         if (keys.IsKeyDown(Keys.Y) && !_prevKeys.IsKeyDown(Keys.Y))
-            _screenFX.TriggerChromaticAberration(centerPixels, 0.1f, 4f);
+            _screenFX.TriggerChromaticAberration(centerPixels, 2f, 0.5f);
         if (keys.IsKeyDown(Keys.U) && !_prevKeys.IsKeyDown(Keys.U))
-            _screenFX.TriggerChromaticAberration(centerPixels, 0.05f, 2f);
+            _screenFX.TriggerChromaticAberration(centerPixels, 4f, 2f);
         if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
-            _screenFX.TriggerChromaticAberration(centerPixels, 0.1f, 1f);
+            _screenFX.TriggerChromaticAberration(new Vector2(320, 360), 1f, 0.4f, FadeCurve.Exponential);   // left-of-center
         if (keys.IsKeyDown(Keys.O) && !_prevKeys.IsKeyDown(Keys.O))
-            _screenFX.TriggerChromaticAberration(new Vector2(320, 360), 0.1f, 2f);   // left-of-center
+            _screenFX.TriggerChromaticAberration(new Vector2(960, 360), 1f, 0.6f, FadeCurve.Logarithmic);   // right-of-center
         if (keys.IsKeyDown(Keys.P) && !_prevKeys.IsKeyDown(Keys.P))
-            _screenFX.TriggerChromaticAberration(new Vector2(960, 360), 0.1f, 2f);   // right-of-center
+            _screenFX.TriggerChromaticAberration(centerPixels, 1f, 1f);
+        if (keys.IsKeyDown(Keys.OemOpenBrackets) && !_prevKeys.IsKeyDown(Keys.OemOpenBrackets))
+            _screenFX.TriggerChromaticAberration(centerPixels, 1f, 1f, FadeCurve.Logarithmic);   // right-of-center
+        if (keys.IsKeyDown(Keys.OemCloseBrackets) && !_prevKeys.IsKeyDown(Keys.OemCloseBrackets))
+            _screenFX.TriggerChromaticAberration(centerPixels, 1f, 1f, FadeCurve.Exponential);   // right-of-center
+
 
         //Test several different ripple effetcs
         if (keys.IsKeyDown(Keys.A) && !_prevKeys.IsKeyDown(Keys.A))
@@ -128,19 +134,19 @@ public class Game1 : Game
 
         //Test several types of hit flash
         if (keys.IsKeyDown(Keys.Z) && !_prevKeys.IsKeyDown(Keys.Z))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Logarithmic, FlashBlendMode.LinearDodge, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Logarithmic, EffectBlendMode.LinearDodge, 2f);
         if (keys.IsKeyDown(Keys.X) && !_prevKeys.IsKeyDown(Keys.X))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Exponential, FlashBlendMode.LinearDodge, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Exponential, EffectBlendMode.LinearDodge, 2f);
         if (keys.IsKeyDown(Keys.C) && !_prevKeys.IsKeyDown(Keys.C))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.ColorBurn, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.ColorBurn, 2f);
         if (keys.IsKeyDown(Keys.V) && !_prevKeys.IsKeyDown(Keys.V))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.ColorDodge, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.ColorDodge, 2f);
         if (keys.IsKeyDown(Keys.B) && !_prevKeys.IsKeyDown(Keys.B))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.LinearBurn, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.LinearBurn, 2f);
         if (keys.IsKeyDown(Keys.N) && !_prevKeys.IsKeyDown(Keys.N))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.Multiply, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.Multiply, 2f);
         if (keys.IsKeyDown(Keys.M) && !_prevKeys.IsKeyDown(Keys.M))
-            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, FlashBlendMode.Screen, 2f);
+            _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.Screen, 2f);
 
         _prevKeys = keys;
         base.Update(gameTime);
