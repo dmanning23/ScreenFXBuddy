@@ -27,6 +27,10 @@
 //                 radii and angular segments are uniform in screen space
 //                 rather than stretched on non-square viewports.  Set by
 //                 SpeedLinesLayer each frame.
+//
+//   Seed        — Per-instance random float generated in SpeedLinesInstance
+//                 constructor.  Offsets the angular hash so each triggered
+//                 burst has a unique line layout.
 // ============================================================================
 
 #if OPENGL
@@ -45,6 +49,7 @@ float  LineCount;   // passed as float to avoid int-uniform driver quirks
 float  InnerRadius; // UV-radius below which pixels are transparent (expand cutoff)
 float  MaxRadius;   // UV-radius above which pixels are transparent
 float  AspectRatio; // viewport width / height, set by SpeedLinesLayer
+float  Seed;        // per-instance random offset, varies line pattern each trigger
 
 static const float PI = 3.14159265;
 
@@ -80,8 +85,9 @@ float4 PS(VertexShaderOutput input) : COLOR
     float angle   = atan2(dirCorrected.y, dirCorrected.x);
     float segment = fmod(floor((angle / (2.0 * PI) + 0.5) * LineCount), LineCount);
 
-    // Hash the segment — roughly half of segments become lines
-    float hash = frac(sin(segment * 127.1 + 311.7) * 43758.5453);
+    // Hash the segment — roughly half of segments become lines.
+    // Seed offsets the hash so each triggered instance has a unique pattern.
+    float hash = frac(sin(segment * 127.1 + 311.7 + Seed) * 43758.5453);
     if (hash < 0.5)
         return float4(0, 0, 0, 0);
 

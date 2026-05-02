@@ -25,6 +25,10 @@ public class SpeedLinesInstance
     public FadeCurve FadeCurve { get; }
     public int LineCount { get; }
     /// <summary>
+    /// Per-instance random seed passed to the shader to vary the line pattern each trigger.
+    /// </summary>
+    public float Seed { get; } = Random.Shared.NextSingle() * 1000f;
+    /// <summary>
     /// Outer radius of the burst in corrected UV space (Y axis is the reference).
     /// 0.5 reaches the top/bottom screen edges. On a 16:9 viewport, use ~0.9 to reach
     /// left/right edges, or 1.0 for full-screen coverage.

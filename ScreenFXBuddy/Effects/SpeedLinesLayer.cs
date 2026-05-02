@@ -19,6 +19,7 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
     private EffectParameter _pInnerRadius;
     private EffectParameter _pMaxRadius;
     private EffectParameter _pAspectRatio;   // REQUIRED — shader breaks without this
+    private EffectParameter _pSeed;
 
     public bool IsActive => _instances.Count > 0;
 
@@ -36,6 +37,7 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
         _pInnerRadius = _effect.Parameters["InnerRadius"];
         _pMaxRadius   = _effect.Parameters["MaxRadius"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
+        _pSeed        = _effect.Parameters["Seed"];
 
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
         _whitePixel.SetData(new[] { Color.White });
@@ -83,6 +85,7 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
             _pInnerRadius.SetValue(inst.CurrentInnerRadius);
             _pMaxRadius.SetValue(inst.MaxRadius);
             _pAspectRatio.SetValue(aspectRatio);
+            _pSeed.SetValue(inst.Seed);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
                 SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
