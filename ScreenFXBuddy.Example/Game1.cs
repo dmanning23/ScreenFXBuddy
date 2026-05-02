@@ -58,8 +58,19 @@ public class Game1 : Game
         //Test all the effects to make sure they are plumbed correctly
         if (keys.IsKeyDown(Keys.D1) && !_prevKeys.IsKeyDown(Keys.D1))
             _screenFX.TriggerForceRipple(centerPixels);
+        // Default gravity wave
         if (keys.IsKeyDown(Keys.D2) && !_prevKeys.IsKeyDown(Keys.D2))
-            _screenFX.TriggerGravityWave(center);
+            _screenFX.TriggerGravityWave(new Vector2(ScreenWidth / 2f, ScreenHeight * 0.75f));
+
+        // Slow wide wave — big expanding crescent
+        if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
+            _screenFX.TriggerGravityWave(new Vector2(ScreenWidth / 2f, ScreenHeight * 0.75f),
+                strength: 0.06f, startHeight: 0.02f, endHeight: 0.4f, speed: 0.3f, duration: 2.5f);
+
+        // Fast tight wave — snappy ground skim
+        if (keys.IsKeyDown(Keys.O) && !_prevKeys.IsKeyDown(Keys.O))
+            _screenFX.TriggerGravityWave(new Vector2(ScreenWidth / 2f, ScreenHeight * 0.75f),
+                strength: 0.03f, startHeight: 0.05f, endHeight: 0.12f, speed: 0.9f, duration: 0.8f);
         if (keys.IsKeyDown(Keys.D3) && !_prevKeys.IsKeyDown(Keys.D3))
             _screenFX.TriggerScreenShake();
         if (keys.IsKeyDown(Keys.D4) && !_prevKeys.IsKeyDown(Keys.D4))
@@ -102,9 +113,9 @@ public class Game1 : Game
             _screenFX.TriggerChromaticAberration(centerPixels, 2f, 0.5f);
         if (keys.IsKeyDown(Keys.U) && !_prevKeys.IsKeyDown(Keys.U))
             _screenFX.TriggerChromaticAberration(centerPixels, 4f, 2f);
-        if (keys.IsKeyDown(Keys.I) && !_prevKeys.IsKeyDown(Keys.I))
+        if (keys.IsKeyDown(Keys.OemMinus) && !_prevKeys.IsKeyDown(Keys.OemMinus))
             _screenFX.TriggerChromaticAberration(new Vector2(320, 360), 1f, 0.4f, FadeCurve.Exponential);   // left-of-center
-        if (keys.IsKeyDown(Keys.O) && !_prevKeys.IsKeyDown(Keys.O))
+        if (keys.IsKeyDown(Keys.OemPlus) && !_prevKeys.IsKeyDown(Keys.OemPlus))
             _screenFX.TriggerChromaticAberration(new Vector2(960, 360), 1f, 0.6f, FadeCurve.Logarithmic);   // right-of-center
         if (keys.IsKeyDown(Keys.P) && !_prevKeys.IsKeyDown(Keys.P))
             _screenFX.TriggerChromaticAberration(centerPixels, 1f, 1f);
