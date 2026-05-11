@@ -119,4 +119,4 @@ UpgradeLog*.XML
 .vs/
 .claude/
 .superpowers/
-docs/
+# docs/ — unignored so superpowers specs are tracked in git
