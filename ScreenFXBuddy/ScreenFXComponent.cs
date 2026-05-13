@@ -1,19 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameTimer;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ScreenFXBuddy.Effects;
 
 namespace ScreenFXBuddy;
 
-public class ScreenFXComponent : DrawableGameComponent
+public class ScreenFXComponent : IScreenFXService, IDisposable
 {
+    private Game Game { get; set; }
+    private GraphicsDevice GraphicsDevice { get; set; }
     private SpriteBatch _spriteBatch;
     private RenderTarget2D _sceneTarget;
     private RenderTarget2D _pingTarget;
     private RenderTarget2D _pongTarget;
     private bool _capturing;
+    private Point _renderTargetSize;
 
     public List<IDistortionLayer> DistortionLayers { get; } = new();
     public List<IOverlayLayer> OverlayLayers { get; } = new();
@@ -27,16 +32,24 @@ public class ScreenFXComponent : DrawableGameComponent
     public AnimeSuperLayer AnimeSuper { get; private set; }
     public SpeedLinesLayer SpeedLines { get; private set; }
 
-    public ScreenFXComponent(Game game) : base(game) { }
+    private ContentManager Content { get; set; }
 
-    protected override void LoadContent()
+    public ScreenFXComponent(Game game)
     {
+        Game = game;
+        Game.Services.AddService<IScreenFXService>(this);
+    }
+
+    public void LoadContent(ContentManager contentManager = null)
+    {
+        GraphicsDevice = Game.GraphicsDevice;
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         var pp = GraphicsDevice.PresentationParameters;
-        _sceneTarget = CreateTarget(pp);
-        _pingTarget = CreateTarget(pp);
-        _pongTarget = CreateTarget(pp);
+        _renderTargetSize = new Point(pp.BackBufferWidth, pp.BackBufferHeight);
+        _sceneTarget = CreateTarget(_renderTargetSize);
+        _pingTarget = CreateTarget(_renderTargetSize);
+        _pongTarget = CreateTarget(_renderTargetSize);
 
         ForceRipple = new ForceRippleLayer(GraphicsDevice);
         GravityWave = new GravityWaveLayer(GraphicsDevice);
@@ -52,24 +65,48 @@ public class ScreenFXComponent : DrawableGameComponent
         OverlayLayers.AddRange(new IOverlayLayer[]
             { HitFlash, AnimeSuper, SpeedLines });
 
-        foreach (var layer in DistortionLayers) layer.LoadContent(Game.Content);
-        foreach (var layer in OverlayLayers) layer.LoadContent(Game.Content);
+        //Let's use our own content manager
+        if (null == contentManager)
+        {
+            Content = new ContentManager(Game.Services)
+            {
+                RootDirectory = "Content"
+            };
+        }
+        else
+        {
+            Content = contentManager;
+        }
+
+        foreach (var layer in DistortionLayers) layer.LoadContent(Content);
+        foreach (var layer in OverlayLayers) layer.LoadContent(Content);
     }
 
-    public override void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        foreach (var layer in DistortionLayers) layer.Update(gameTime);
-        foreach (var layer in OverlayLayers) layer.Update(gameTime);
-        base.Update(gameTime);
+        foreach (var layer in DistortionLayers) layer.Update(clock);
+        foreach (var layer in OverlayLayers) layer.Update(clock);
     }
 
-    public void BeginCapture()
+    public void BeginCapture(Point? virtualResolution = null)
     {
+        var size = virtualResolution ?? _renderTargetSize;
+        if (size != _renderTargetSize)
+        {
+            _renderTargetSize = size;
+            _sceneTarget?.Dispose();
+            _pingTarget?.Dispose();
+            _pongTarget?.Dispose();
+            _sceneTarget = CreateTarget(_renderTargetSize);
+            _pingTarget = CreateTarget(_renderTargetSize);
+            _pongTarget = CreateTarget(_renderTargetSize);
+        }
+
         _capturing = true;
         GraphicsDevice.SetRenderTarget(_sceneTarget);
     }
 
-    public void EndCapture()
+    public void EndCapture(Matrix? transformMatrix = null, Action resetViewport = null)
     {
         if (!_capturing) return;
         _capturing = false;
@@ -90,9 +127,17 @@ public class ScreenFXComponent : DrawableGameComponent
 
         // Blit final result (or unmodified scene) to back buffer.
         GraphicsDevice.SetRenderTarget(null);
+        resetViewport?.Invoke();
+
         _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
-            SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone);
-        _spriteBatch.Draw(source, GraphicsDevice.Viewport.Bounds, Color.White);
+            SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
+            null, transformMatrix ?? Matrix.Identity);
+
+        if (transformMatrix.HasValue)
+            _spriteBatch.Draw(source, Vector2.Zero, Color.White);
+        else
+            _spriteBatch.Draw(source, GraphicsDevice.Viewport.Bounds, Color.White);
+
         _spriteBatch.End();
 
         // Additive overlay layers on top of the back buffer.
@@ -108,11 +153,11 @@ public class ScreenFXComponent : DrawableGameComponent
 
     public void TriggerGravityWave(
         Vector2 position,
-        float strength    = 0.04f,
+        float strength = 0.04f,
         float startHeight = 0.05f,
-        float endHeight   = 0.25f,
-        float speed       = 0.5f,
-        float duration    = 1.5f)
+        float endHeight = 0.25f,
+        float speed = 0.5f,
+        float duration = 1.5f)
         => GravityWave.Trigger(position, strength, startHeight, endHeight, speed, duration);
 
     public void TriggerScreenShake(float length = 1f, float delta = 0.1f, float amount = 0.1f)
@@ -141,29 +186,30 @@ public class ScreenFXComponent : DrawableGameComponent
         Vector2 position,
         Color color,
         SpeedLinesMode linesMode = SpeedLinesMode.Expand,
-        FadeMode fadeMode        = FadeMode.FadeOut,
-        FadeCurve fadeCurve      = FadeCurve.Logarithmic,
-        int lineCount            = 24,
-        float maxRadius          = 1.0f,
-        float duration           = 1f)
+        FadeMode fadeMode = FadeMode.FadeOut,
+        FadeCurve fadeCurve = FadeCurve.Logarithmic,
+        int lineCount = 24,
+        float maxRadius = 1.0f,
+        float duration = 1f)
         => SpeedLines.Trigger(position, color, linesMode, fadeMode, fadeCurve, lineCount, maxRadius, duration);
 
-    private RenderTarget2D CreateTarget(PresentationParameters pp) =>
-        new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-            false, pp.BackBufferFormat, pp.DepthStencilFormat);
-
-    protected override void Dispose(bool disposing)
+    private RenderTarget2D CreateTarget(Point size)
     {
-        if (disposing)
-        {
-            _sceneTarget?.Dispose();
-            _pingTarget?.Dispose();
-            _pongTarget?.Dispose();
-            _spriteBatch?.Dispose();
+        var pp = GraphicsDevice.PresentationParameters;
+        return new RenderTarget2D(GraphicsDevice, size.X, size.Y,
+            false, pp.BackBufferFormat, pp.DepthStencilFormat);
+    }
 
-            foreach (var layer in DistortionLayers.OfType<IDisposable>()) layer.Dispose();
-            foreach (var layer in OverlayLayers.OfType<IDisposable>()) layer.Dispose();
-        }
-        base.Dispose(disposing);
+    public void Dispose()
+    {
+        _sceneTarget?.Dispose();
+        _pingTarget?.Dispose();
+        _pongTarget?.Dispose();
+        _spriteBatch?.Dispose();
+
+        foreach (var layer in DistortionLayers.OfType<IDisposable>()) layer.Dispose();
+        DistortionLayers.Clear();
+        foreach (var layer in OverlayLayers.OfType<IDisposable>()) layer.Dispose();
+        OverlayLayers.Clear();
     }
 }

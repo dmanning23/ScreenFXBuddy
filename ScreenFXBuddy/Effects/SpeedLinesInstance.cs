@@ -43,23 +43,23 @@ public class SpeedLinesInstance
         int lineCount, float maxRadius, float duration)
     {
         PixelPosition = pixelPosition;
-        Color         = color;
-        LinesMode     = linesMode;
-        FadeMode      = fadeMode;
-        FadeCurve     = fadeCurve;
-        LineCount     = lineCount;
-        MaxRadius     = maxRadius;
+        Color = color;
+        LinesMode = linesMode;
+        FadeMode = fadeMode;
+        FadeCurve = fadeCurve;
+        LineCount = lineCount;
+        MaxRadius = maxRadius;
         Timer.Start(duration);
     }
 
-    public void Update(GameTime gameTime) => Timer.Update(gameTime);
+    public void Update(GameClock clock) => Timer.Update(clock);
 
     // 0–1 intensity for the current frame, derived from FadeMode + FadeCurve + timer.
     public float CurrentAlpha => FadeMode switch
     {
-        FadeMode.FadeIn  => ApplyCurve(1f - Timer.Lerp),
+        FadeMode.FadeIn => ApplyCurve(1f - Timer.Lerp),
         FadeMode.FadeOut => ApplyCurve(Timer.Lerp),
-        _                => 1f
+        _ => 1f
     };
 
     // UV-space inner radius. Static = 0 always. Expand = grows from 0 → MaxRadius.
@@ -72,6 +72,6 @@ public class SpeedLinesInstance
     {
         FadeCurve.Logarithmic => MathF.Log(1f + t * (MathF.E - 1f)),
         FadeCurve.Exponential => t * t,
-        _                     => t
+        _ => t
     };
 }

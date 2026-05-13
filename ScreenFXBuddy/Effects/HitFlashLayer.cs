@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using GameTimer;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -94,12 +95,12 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
         _flashes.Add(new HitFlashInstance(blendColor, mode, curve, blendMode, time));
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
         var i = 0;
         while (i < _flashes.Count)
         {
-            _flashes[i].Update(gameTime);
+            _flashes[i].Update(clock);
             if (!_flashes[i].IsAlive)
                 _flashes.RemoveAt(i);
             else
@@ -123,12 +124,12 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
 
     private static BlendState GetBlendState(EffectBlendMode mode) => mode switch
     {
-        EffectBlendMode.Multiply    => _multiplyBlend,
-        EffectBlendMode.ColorBurn   => _colorBurnBlend,
-        EffectBlendMode.LinearBurn  => _linearBurnBlend,
-        EffectBlendMode.Screen      => _screenBlend,
-        EffectBlendMode.ColorDodge  => _colorDodgeBlend,
-        _                          => _linearDodgeBlend
+        EffectBlendMode.Multiply => _multiplyBlend,
+        EffectBlendMode.ColorBurn => _colorBurnBlend,
+        EffectBlendMode.LinearBurn => _linearBurnBlend,
+        EffectBlendMode.Screen => _screenBlend,
+        EffectBlendMode.ColorDodge => _colorDodgeBlend,
+        _ => _linearDodgeBlend
     };
 
     public void Dispose()

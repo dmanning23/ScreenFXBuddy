@@ -37,9 +37,9 @@ public class HitFlashInstance
         Timer.Start(time);
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        Timer.Update(gameTime);
+        Timer.Update(clock);
     }
 
     public Color GetCurrentColor()

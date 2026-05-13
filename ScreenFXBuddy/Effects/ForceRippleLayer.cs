@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using GameTimer;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -25,7 +26,7 @@ public class ForceRippleLayer : IDistortionLayer
     // Reused each frame to avoid allocations.
     // float4 is used for both arrays to avoid float2/float3 GLSL packing quirks.
     private readonly Vector4[] _positionBuffer = new Vector4[MaxInstances];
-    private readonly Vector4[] _ringBuffer      = new Vector4[MaxInstances];
+    private readonly Vector4[] _ringBuffer = new Vector4[MaxInstances];
 
     private readonly List<RippleInstance> _ripples = new();
 
@@ -45,10 +46,10 @@ public class ForceRippleLayer : IDistortionLayer
     public void LoadContent(ContentManager content)
     {
         _effect = content.Load<Effect>("Distorter_Ripple");
-        _pRippleCount     = _effect.Parameters["RippleCount"];
+        _pRippleCount = _effect.Parameters["RippleCount"];
         _pRipplePositions = _effect.Parameters["RipplePositions"];
-        _pRippleRings     = _effect.Parameters["RippleRings"];
-        _pAspectRatio     = _effect.Parameters["AspectRatio"];
+        _pRippleRings = _effect.Parameters["RippleRings"];
+        _pAspectRatio = _effect.Parameters["AspectRatio"];
     }
 
     /// <summary>
@@ -64,12 +65,12 @@ public class ForceRippleLayer : IDistortionLayer
         _ripples.Add(new RippleInstance(position, strength, speed, size, time));
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
         var i = 0;
         while (i < _ripples.Count)
         {
-            _ripples[i].Update(gameTime);
+            _ripples[i].Update(clock);
             if (!_ripples[i].IsAlive)
                 _ripples.RemoveAt(i);
             else
@@ -87,7 +88,7 @@ public class ForceRippleLayer : IDistortionLayer
             var r = _ripples[i];
 
             // How far the ripple has travelled outward from its origin
-            float elapsed     = r.TotalTime - r.Timer.RemainingTime;
+            float elapsed = r.TotalTime - r.Timer.RemainingTime;
             float outerRadius = elapsed * r.Speed;
             float innerRadius = Math.Max(0f, outerRadius - r.Size);
 
@@ -99,7 +100,7 @@ public class ForceRippleLayer : IDistortionLayer
             var remainingStrength = r.Strength * r.Timer.Lerp;
 
             _positionBuffer[i] = new Vector4(x, y, 0f, 0f);
-            _ringBuffer[i]     = new Vector4(outerRadius, innerRadius, remainingStrength, 0f);
+            _ringBuffer[i] = new Vector4(outerRadius, innerRadius, remainingStrength, 0f);
         }
 
         _pRippleCount.SetValue((float)count);

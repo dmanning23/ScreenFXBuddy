@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ScreenFXBuddy;
 using ScreenFXBuddy.Effects;
+using GameTimer;
 
 namespace ScreenFXBuddy.Example;
 
@@ -19,6 +20,8 @@ public class Game1 : Game
     private const int ScreenWidth = 1280;
     private const int ScreenHeight = 720;
 
+    GameClock timer { get; set; }
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this)
@@ -30,7 +33,7 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         _screenFX = new ScreenFXComponent(this);
-        Components.Add(_screenFX);
+        timer = new GameClock();
     }
 
     protected override void Initialize()
@@ -42,12 +45,16 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _background = Content.Load<Texture2D>("Braid_screenshot8");
+        _screenFX.LoadContent();
+
+        timer.Start();
 
         base.LoadContent();
     }
 
     protected override void Update(GameTime gameTime)
     {
+        timer.Update(gameTime);
         var keys = Keyboard.GetState();
 
         if (keys.IsKeyDown(Keys.Escape)) Exit();
@@ -179,6 +186,8 @@ public class Game1 : Game
                 SpeedLinesMode.Static, FadeMode.FadeIn, FadeCurve.Logarithmic, 64, 1f, 0.3f);
 
         _prevKeys = keys;
+
+        _screenFX.Update(timer);
         base.Update(gameTime);
     }
 

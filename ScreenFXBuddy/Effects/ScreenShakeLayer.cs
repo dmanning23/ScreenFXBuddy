@@ -138,10 +138,10 @@ public class ScreenShakeLayer : IDistortionLayer
         EndlessShake = false;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        WholeTimer.Update(gameTime);
-        ShakeTimer.Update(gameTime);
+        WholeTimer.Update(clock);
+        ShakeTimer.Update(clock);
 
         if (IsActive && !ShakeTimer.Paused && !ShakeTimer.HasTimeRemaining)
         {

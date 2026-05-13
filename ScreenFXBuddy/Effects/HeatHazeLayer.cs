@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using GameTimer;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -30,9 +31,9 @@ public class HeatHazeLayer : IDistortionLayer
         _remaining = duration;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        float dt = clock.TimeDelta;
         _remaining = Math.Max(0f, _remaining - dt);
     }
 

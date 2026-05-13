@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using GameTimer;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -19,11 +20,11 @@ public class GravityWaveLayer : IDistortionLayer
 
     private readonly List<WaveInstance> _instances = new();
 
-    private const int   MaxInstances = 8;
-    private const float BandWidth    = 0.06f;
+    private const int MaxInstances = 8;
+    private const float BandWidth = 0.06f;
 
     private readonly Vector4[] _originBuffer = new Vector4[MaxInstances];
-    private readonly Vector4[] _stateBuffer  = new Vector4[MaxInstances];
+    private readonly Vector4[] _stateBuffer = new Vector4[MaxInstances];
 
     public bool IsActive => _instances.Count > 0;
 
@@ -34,29 +35,29 @@ public class GravityWaveLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect       = content.Load<Effect>("Distorter_GravityWave");
-        _pWaveCount   = _effect.Parameters["WaveCount"];
+        _effect = content.Load<Effect>("Distorter_GravityWave");
+        _pWaveCount = _effect.Parameters["WaveCount"];
         _pWaveOrigins = _effect.Parameters["WaveOrigins"];
-        _pWaveState   = _effect.Parameters["WaveState"];
+        _pWaveState = _effect.Parameters["WaveState"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
-        _pBandWidth   = _effect.Parameters["BandWidth"];
+        _pBandWidth = _effect.Parameters["BandWidth"];
     }
 
     public void Trigger(
         Vector2 position,
-        float strength    = 0.04f,
+        float strength = 0.04f,
         float startHeight = 0.05f,
-        float endHeight   = 0.25f,
-        float speed       = 0.5f,
-        float duration    = 1.5f)
+        float endHeight = 0.25f,
+        float speed = 0.5f,
+        float duration = 1.5f)
     {
         if (_instances.Count >= MaxInstances) return;
         _instances.Add(new WaveInstance(position, strength, startHeight, endHeight, speed, duration, 0f));
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        float dt = clock.TimeDelta;
         for (int i = _instances.Count - 1; i >= 0; i--)
         {
             var inst = _instances[i];

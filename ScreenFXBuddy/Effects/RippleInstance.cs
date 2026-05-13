@@ -60,8 +60,8 @@ public class RippleInstance
         Timer.Start(time);
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        Timer.Update(gameTime);
+        Timer.Update(clock);
     }
 }

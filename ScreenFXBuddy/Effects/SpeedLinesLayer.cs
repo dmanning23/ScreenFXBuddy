@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using GameTimer;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -30,14 +31,14 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
 
     public void LoadContent(ContentManager content)
     {
-        _effect       = content.Load<Effect>("Overlay_SpeedLines");
-        _pCenter      = _effect.Parameters["Center"];
-        _pLineColor   = _effect.Parameters["LineColor"];
-        _pLineCount   = _effect.Parameters["LineCount"];
+        _effect = content.Load<Effect>("Overlay_SpeedLines");
+        _pCenter = _effect.Parameters["Center"];
+        _pLineColor = _effect.Parameters["LineColor"];
+        _pLineCount = _effect.Parameters["LineCount"];
         _pInnerRadius = _effect.Parameters["InnerRadius"];
-        _pMaxRadius   = _effect.Parameters["MaxRadius"];
+        _pMaxRadius = _effect.Parameters["MaxRadius"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
-        _pSeed        = _effect.Parameters["Seed"];
+        _pSeed = _effect.Parameters["Seed"];
 
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
         _whitePixel.SetData(new[] { Color.White });
@@ -45,22 +46,22 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
 
     public void Trigger(Vector2 pixelPosition, Color color,
         SpeedLinesMode linesMode = SpeedLinesMode.Expand,
-        FadeMode fadeMode        = FadeMode.FadeOut,
-        FadeCurve fadeCurve      = FadeCurve.Logarithmic,
-        int lineCount            = 24,
-        float maxRadius          = 1.0f,
-        float duration           = 1f)
+        FadeMode fadeMode = FadeMode.FadeOut,
+        FadeCurve fadeCurve = FadeCurve.Logarithmic,
+        int lineCount = 24,
+        float maxRadius = 1.0f,
+        float duration = 1f)
     {
         _instances.Add(new SpeedLinesInstance(
             pixelPosition, color, linesMode, fadeMode, fadeCurve, lineCount, maxRadius, duration));
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
         int i = 0;
         while (i < _instances.Count)
         {
-            _instances[i].Update(gameTime);
+            _instances[i].Update(clock);
             if (!_instances[i].IsAlive)
                 _instances.RemoveAt(i);
             else

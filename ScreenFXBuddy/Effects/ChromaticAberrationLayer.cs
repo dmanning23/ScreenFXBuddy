@@ -48,9 +48,9 @@ public class ChromaticAberrationLayer : IDistortionLayer
         Timer.Start(time);
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(GameClock clock)
     {
-        Timer.Update(gameTime);
+        Timer.Update(clock);
     }
 
     private float ApplyCurve(float t) => FadeCurve switch
