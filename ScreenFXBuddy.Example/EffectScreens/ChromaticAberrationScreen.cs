@@ -2,36 +2,18 @@ using System.Threading.Tasks;
 using MenuBuddy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using ScreenFXBuddy;
-using ScreenFXBuddy.Effects;
 
 namespace ScreenFXBuddy.Example
 {
     class ChromaticAberrationScreen : BaseEffectScreen
     {
-        private KeyboardState _prevKeys;
-
-        private IScreenFXService _screenFX;
-
         public ChromaticAberrationScreen() : base("ChromaticAberration")
         {
-            CoverOtherScreens = true;
-        }
-
-        public override async Task LoadContent()
-        {
-            await base.LoadContent();
-            _screenFX = ScreenManager.Game.Services.GetService<IScreenFXService>();
         }
 
         public override void Update(GameTime gameTime, bool otherWindowHasFocus, bool covered)
         {
             var centerPixels = new Vector2(1280 / 2, 720 / 2);
-
-            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.Escape))
-            {
-                ExitScreen();
-            }
 
             //Test different versions of chromatic aberration
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D1))

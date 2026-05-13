@@ -21,6 +21,41 @@ namespace ScreenFXBuddy.Example
                 ScreenManager.AddScreen(new ChromaticAberrationScreen());
             });
             AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("ForceRipple", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ForceRippleScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("GravityWave", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new GravityWaveScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("HitFlash", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new HitFlashScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("ScreenShake", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ScreenShakeScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("SpeedLine", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new SpeedLineScreen());
+            });
+            AddMenuEntry(entry2);
         }
 
         public override void ExitScreen()
