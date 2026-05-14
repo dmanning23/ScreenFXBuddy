@@ -52,6 +52,7 @@ public class GlassShatterLayer : IDistortionLayer
     /// <param name="duration">Total effect duration in seconds.</param>
     public void Trigger(Vector2 position, float strength = 0.04f, int numCells = 20, float duration = 0.8f)
     {
+        if (numCells < 2) numCells = 2;
         float seed = Random.Shared.NextSingle() * 1000f;
         _instance = new ShatterInstance(position, strength, numCells, seed, duration, 0f);
     }

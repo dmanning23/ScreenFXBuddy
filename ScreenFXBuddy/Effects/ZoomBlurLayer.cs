@@ -79,7 +79,7 @@ public class ZoomBlurLayer : IDistortionLayer
         _pAspectRatio.SetValue((float)vp.Width / vp.Height);
         _pSceneTexture.SetValue(source);
 
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);
         spriteBatch.Draw(source, vp.Bounds, Color.White);
