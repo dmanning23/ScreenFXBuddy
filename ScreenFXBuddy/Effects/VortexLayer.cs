@@ -97,7 +97,7 @@ public class VortexLayer : IDistortionLayer
         _pVortexState.SetValue(_stateBuffer);
         _pAspectRatio.SetValue(aspectRatio);
 
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);
         spriteBatch.Draw(source, vp.Bounds, Color.White);
