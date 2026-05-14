@@ -55,6 +55,8 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
+        if (!_active) return;
+
         float alpha;
         if (_age < _flashIn)
             alpha = _flashIn > 0f ? _age / _flashIn : 1f;
