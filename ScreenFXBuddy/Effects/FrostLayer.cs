@@ -92,6 +92,7 @@ public class FrostLayer : IOverlayLayer, IDisposable
 
     public void Dispose()
     {
+        _effect?.Dispose();
         _whitePixel?.Dispose();
     }
 }

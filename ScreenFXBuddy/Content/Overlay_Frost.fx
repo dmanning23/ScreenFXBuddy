@@ -45,6 +45,8 @@ float4 PS(VertexShaderOutput input) : COLOR
     float2 off = float2((uv.x - Origin.x) * AspectRatio, uv.y - Origin.y);
     float  dist = length(off);
 
+    if (dist < 0.0001) return float4(0, 0, 0, 0);
+
     float frostRadius = Radius * min(Progress * 2.0, 1.0);
 
     if (dist > frostRadius * 1.15) return float4(0, 0, 0, 0);
