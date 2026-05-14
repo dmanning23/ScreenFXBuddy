@@ -52,8 +52,11 @@ public interface IScreenFXService
         FadeCurve curve = FadeCurve.Linear);
 
     public void TriggerHeatHaze(
-        float intensity,
-        float duration);
+        Vector2 position,
+        float strength = 0.02f,
+        float radius   = 0.15f,
+        float height   = 0.40f,
+        float duration = 3.0f);
 
     public void TriggerHitFlash(
         Color blendColor,

@@ -25,6 +25,12 @@
 /processorParam:DebugMode=Auto
 /build:../../ScreenFXBuddy/Content/Distorter_GravityWave.fx;Distorter_GravityWave.fx
 
+#begin ../../ScreenFXBuddy/Content/Distorter_HeatHaze.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_HeatHaze.fx;Distorter_HeatHaze.fx
+
 #begin ../../ScreenFXBuddy/Content/Distorter_FreezeFrame.fx
 /importer:EffectImporter
 /processor:EffectProcessor

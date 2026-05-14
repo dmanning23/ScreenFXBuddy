@@ -83,7 +83,7 @@ public class Game1 : Game
         if (keys.IsKeyDown(Keys.D4) && !_prevKeys.IsKeyDown(Keys.D4))
             _screenFX.TriggerChromaticAberration(centerPixels, 1f, 2f);
         if (keys.IsKeyDown(Keys.D5) && !_prevKeys.IsKeyDown(Keys.D5))
-            _screenFX.TriggerHeatHaze(1f, 2f);
+            _screenFX.TriggerHeatHaze(new Vector2(ScreenWidth / 2f, ScreenHeight * 0.75f));
         if (keys.IsKeyDown(Keys.D6) && !_prevKeys.IsKeyDown(Keys.D6))
             _screenFX.TriggerHitFlash(Color.White, FadeMode.FadeOut, FadeCurve.Linear, EffectBlendMode.LinearDodge, 2f);
         if (keys.IsKeyDown(Keys.D7) && !_prevKeys.IsKeyDown(Keys.D7))

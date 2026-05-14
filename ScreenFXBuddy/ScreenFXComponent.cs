@@ -183,8 +183,13 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         FadeCurve curve = FadeCurve.Linear)
         => ChromaticAberration.Trigger(startPosition, distance, time, curve);
 
-    public void TriggerHeatHaze(float intensity, float duration)
-        => HeatHaze.Trigger(intensity, duration);
+    public void TriggerHeatHaze(
+        Vector2 position,
+        float strength = 0.02f,
+        float radius   = 0.15f,
+        float height   = 0.40f,
+        float duration = 3.0f)
+        => HeatHaze.Trigger(position, strength, radius, height, duration);
 
     public void TriggerHitFlash(Color blendColor,
         FadeMode mode = FadeMode.FadeOut,
