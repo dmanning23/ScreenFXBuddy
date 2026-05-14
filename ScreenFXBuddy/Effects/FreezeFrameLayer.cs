@@ -76,12 +76,12 @@ public class FreezeFrameLayer : IDistortionLayer
         }
 
         var vp = _graphicsDevice.Viewport;
+        _graphicsDevice.SetRenderTarget(destination);
+
         _pTintColor.SetValue(_tintColor);
         _pIntensity.SetValue(intensity);
         _pAspectRatio.SetValue((float)vp.Width / vp.Height);
         _pSceneTexture.SetValue(source);
-
-        _graphicsDevice.SetRenderTarget(destination);
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
             _effect);
