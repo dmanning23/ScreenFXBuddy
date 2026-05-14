@@ -43,7 +43,7 @@ public class VortexLayer : IDistortionLayer
     /// <param name="position">Pixel-space position of the vortex centre.</param>
     /// <param name="strength">Peak swirl magnitude. 0.30 is visible; higher values are dramatic.</param>
     /// <param name="radius">UV-space radius of the affected area. 0.25 covers roughly a quarter of screen height.</param>
-    /// <param name="speed">Rotation direction and speed multiplier. Positive = counter-clockwise; negative = clockwise.</param>
+    /// <param name="speed">Rotation direction and speed multiplier. Positive = clockwise; negative = counter-clockwise.</param>
     /// <param name="duration">Total effect duration in seconds.</param>
     public void Trigger(
         Vector2 position,
@@ -72,6 +72,8 @@ public class VortexLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        _graphicsDevice.SetRenderTarget(destination);
+
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;
 
@@ -89,8 +91,6 @@ public class VortexLayer : IDistortionLayer
 
             _stateBuffer[i] = new Vector4(swirl, inst.Radius, 0f, 0f);
         }
-
-        _graphicsDevice.SetRenderTarget(destination);
 
         _pVortexCount.SetValue((float)count);
         _pVortexOrigins.SetValue(_originBuffer);
