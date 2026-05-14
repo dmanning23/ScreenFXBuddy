@@ -35,6 +35,9 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public FreezeFrameLayer FreezeFrame { get; private set; }
     public ZoomBlurLayer ZoomBlur { get; private set; }
     public ScreenTiltLayer ScreenTilt { get; private set; }
+    public ElectricLayer Electric { get; private set; }
+    public FrostLayer Frost { get; private set; }
+    public VortexLayer Vortex { get; private set; }
 
     private ContentManager Content { get; set; }
 
@@ -67,11 +70,14 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         FreezeFrame = new FreezeFrameLayer(GraphicsDevice);
         ZoomBlur   = new ZoomBlurLayer(GraphicsDevice);
         ScreenTilt = new ScreenTiltLayer(GraphicsDevice);
+        Electric = new ElectricLayer(GraphicsDevice);
+        Frost    = new FrostLayer(GraphicsDevice);
+        Vortex   = new VortexLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
-            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame, ZoomBlur, ScreenTilt });
+            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame, ZoomBlur, ScreenTilt, Vortex });
         OverlayLayers.AddRange(new IOverlayLayer[]
-            { HitFlash, AnimeSuper, Letterbox, SpeedLines });
+            { HitFlash, AnimeSuper, Letterbox, SpeedLines, Electric, Frost });
 
         //Let's use our own content manager
         if (null == contentManager)
@@ -204,6 +210,15 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
 
     public void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f)
         => ScreenTilt.Trigger(angle, duration);
+
+    public void TriggerElectric(Vector2 position, Color color, float radius = 0.20f, float duration = 0.60f)
+        => Electric.Trigger(position, color, radius, duration);
+
+    public void TriggerFrost(Vector2 position, Color tintColor, float radius = 0.25f, float duration = 1.50f)
+        => Frost.Trigger(position, tintColor, radius, duration);
+
+    public void TriggerVortex(Vector2 position, float strength = 0.30f, float radius = 0.25f, float speed = 2.00f, float duration = 0.60f)
+        => Vortex.Trigger(position, strength, radius, speed, duration);
 
     public void TriggerSpeedLines(
         Vector2 position,

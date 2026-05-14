@@ -98,6 +98,27 @@ namespace ScreenFXBuddy.Example
                 ScreenManager.AddScreen(new ScreenTiltScreen());
             });
             AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("Electric", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ElectricScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("Frost", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new FrostScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("Vortex", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new VortexScreen());
+            });
+            AddMenuEntry(entry2);
         }
 
         public override void ExitScreen()
