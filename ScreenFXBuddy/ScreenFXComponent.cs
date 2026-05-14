@@ -38,6 +38,8 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public ElectricLayer Electric { get; private set; }
     public FrostLayer Frost { get; private set; }
     public VortexLayer Vortex { get; private set; }
+    public SmokeLayer Smoke { get; private set; }
+    public GlassShatterLayer GlassShatter { get; private set; }
 
     private ContentManager Content { get; set; }
 
@@ -73,11 +75,13 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         Electric = new ElectricLayer(GraphicsDevice);
         Frost    = new FrostLayer(GraphicsDevice);
         Vortex   = new VortexLayer(GraphicsDevice);
+        Smoke        = new SmokeLayer(GraphicsDevice);
+        GlassShatter = new GlassShatterLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
-            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame, ZoomBlur, ScreenTilt, Vortex });
+            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame, ZoomBlur, ScreenTilt, Vortex, GlassShatter });
         OverlayLayers.AddRange(new IOverlayLayer[]
-            { HitFlash, AnimeSuper, Letterbox, SpeedLines, Electric, Frost });
+            { HitFlash, AnimeSuper, Letterbox, SpeedLines, Electric, Frost, Smoke });
 
         //Let's use our own content manager
         if (null == contentManager)
@@ -224,6 +228,12 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
 
     public void TriggerVortex(Vector2 position, float strength = 0.30f, float radius = 0.25f, float speed = 2.00f, float duration = 0.60f)
         => Vortex.Trigger(position, strength, radius, speed, duration);
+
+    public void TriggerSmoke(Vector2 position, Color color, float radius = 0.15f, float duration = 2.0f)
+        => Smoke.Trigger(position, color, radius, duration);
+
+    public void TriggerGlassShatter(Vector2 position, float strength = 0.04f, int numCells = 20, float duration = 0.8f)
+        => GlassShatter.Trigger(position, strength, numCells, duration);
 
     public void TriggerSpeedLines(
         Vector2 position,

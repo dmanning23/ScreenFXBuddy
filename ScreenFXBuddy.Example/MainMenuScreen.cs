@@ -119,6 +119,27 @@ namespace ScreenFXBuddy.Example
                 ScreenManager.AddScreen(new VortexScreen());
             });
             AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("HeatHaze", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new HeatHazeScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("Smoke", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new SmokeScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("GlassShatter", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new GlassShatterScreen());
+            });
+            AddMenuEntry(entry2);
         }
 
         public override void ExitScreen()

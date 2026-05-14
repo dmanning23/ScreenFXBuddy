@@ -24,6 +24,8 @@ public interface IScreenFXService
     ElectricLayer Electric { get; }
     FrostLayer Frost { get; }
     VortexLayer Vortex { get; }
+    SmokeLayer Smoke { get; }
+    GlassShatterLayer GlassShatter { get; }
 
     void TriggerForceRipple(
         Vector2 position,
@@ -77,6 +79,8 @@ public interface IScreenFXService
     void TriggerElectric(Vector2 position, Color color, float radius = 0.20f, float duration = 0.60f);
     void TriggerFrost(Vector2 position, Color tintColor, float radius = 0.25f, float duration = 1.50f);
     void TriggerVortex(Vector2 position, float strength = 0.30f, float radius = 0.25f, float speed = 2.00f, float duration = 0.60f);
+    void TriggerSmoke(Vector2 position, Color color, float radius = 0.15f, float duration = 2.0f);
+    void TriggerGlassShatter(Vector2 position, float strength = 0.04f, int numCells = 20, float duration = 0.8f);
 
     public void TriggerSpeedLines(
         Vector2 position,
