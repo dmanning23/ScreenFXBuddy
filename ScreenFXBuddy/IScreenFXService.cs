@@ -19,6 +19,8 @@ public interface IScreenFXService
     SpeedLinesLayer SpeedLines { get; }
     LetterboxLayer Letterbox { get; }
     FreezeFrameLayer FreezeFrame { get; }
+    ZoomBlurLayer ZoomBlur { get; }
+    ScreenTiltLayer ScreenTilt { get; }
 
     void TriggerForceRipple(
         Vector2 position,
@@ -62,6 +64,10 @@ public interface IScreenFXService
     void TriggerLetterbox(float barHeight = 0.10f, float slideIn = 0.15f, float hold = 1.00f, float slideOut = 0.15f);
 
     void TriggerFreezeFrame(Color tintColor, float flashIn = 0.10f, float hold = 0.40f, float fadeOut = 0.30f);
+
+    void TriggerZoomBlur(Vector2 position, float strength = 0.05f, float radius = 1.0f, float duration = 0.4f);
+    void TriggerChromaticSplit(Vector2 position, float maxDistance = 0.05f, float duration = 0.3f);
+    void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f);
 
     public void TriggerSpeedLines(
         Vector2 position,

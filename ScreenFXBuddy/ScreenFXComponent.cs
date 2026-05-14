@@ -33,6 +33,8 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public SpeedLinesLayer SpeedLines { get; private set; }
     public LetterboxLayer Letterbox { get; private set; }
     public FreezeFrameLayer FreezeFrame { get; private set; }
+    public ZoomBlurLayer ZoomBlur { get; private set; }
+    public ScreenTiltLayer ScreenTilt { get; private set; }
 
     private ContentManager Content { get; set; }
 
@@ -63,9 +65,11 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         SpeedLines = new SpeedLinesLayer(GraphicsDevice);
         Letterbox   = new LetterboxLayer(GraphicsDevice);
         FreezeFrame = new FreezeFrameLayer(GraphicsDevice);
+        ZoomBlur   = new ZoomBlurLayer(GraphicsDevice);
+        ScreenTilt = new ScreenTiltLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
-            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame });
+            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame, ZoomBlur, ScreenTilt });
         OverlayLayers.AddRange(new IOverlayLayer[]
             { HitFlash, AnimeSuper, Letterbox, SpeedLines });
 
@@ -191,6 +195,15 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
 
     public void TriggerFreezeFrame(Color tintColor, float flashIn = 0.10f, float hold = 0.40f, float fadeOut = 0.30f)
         => FreezeFrame.Trigger(tintColor, flashIn, hold, fadeOut);
+
+    public void TriggerZoomBlur(Vector2 position, float strength = 0.05f, float radius = 1.0f, float duration = 0.4f)
+        => ZoomBlur.Trigger(position, strength, radius, duration);
+
+    public void TriggerChromaticSplit(Vector2 position, float maxDistance = 0.05f, float duration = 0.3f)
+        => ChromaticAberration.TriggerSplit(position, maxDistance, duration);
+
+    public void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f)
+        => ScreenTilt.Trigger(angle, duration);
 
     public void TriggerSpeedLines(
         Vector2 position,

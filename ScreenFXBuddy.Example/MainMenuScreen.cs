@@ -77,6 +77,27 @@ namespace ScreenFXBuddy.Example
                 ScreenManager.AddScreen(new FreezeFrameScreen());
             });
             AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("ZoomBlur", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ZoomBlurScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("ChromaticSplit", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ChromaticSplitScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("ScreenTilt", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new ScreenTiltScreen());
+            });
+            AddMenuEntry(entry2);
         }
 
         public override void ExitScreen()
