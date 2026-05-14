@@ -85,6 +85,12 @@
 /processorParam:DebugMode=Auto
 /build:../../ScreenFXBuddy/Content/Overlay_SpeedLines.fx;Overlay_SpeedLines.fx
 
+#begin ../../ScreenFXBuddy/Content/Overlay_Smoke.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_Smoke.fx;Overlay_Smoke.fx
+
 #begin AlphaGradient.png
 /importer:TextureImporter
 /processor:TextureProcessor
