@@ -103,6 +103,8 @@ public class SmokeLayer : IOverlayLayer, IDisposable
     public void Dispose()
     {
         _effect?.Dispose();
+        _effect = null;
         _whitePixel?.Dispose();
+        _whitePixel = null;
     }
 }
