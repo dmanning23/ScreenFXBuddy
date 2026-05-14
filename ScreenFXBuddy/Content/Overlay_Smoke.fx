@@ -66,7 +66,8 @@ float4 PS(VertexShaderOutput input) : COLOR
                    : Progress < 0.7 ? 1.0
                    : 1.0 - (Progress - 0.7) / 0.3;
 
-    float alpha = density * radialFade * vertBias * lifeFade * SmokeColor.a * 0.6;
+    float alpha = density * radialFade * vertBias * lifeFade * SmokeColor.a * 1.5;
+    alpha = min(alpha, 1.0);
     return float4(SmokeColor.rgb * alpha, alpha);
 }
 

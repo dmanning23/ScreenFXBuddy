@@ -92,7 +92,7 @@ public class SmokeLayer : IOverlayLayer, IDisposable
             _pTime.SetValue(_time);
             _pAspectRatio.SetValue(aspectRatio);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
                 SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
                 _effect);
             spriteBatch.Draw(_whitePixel, vp.Bounds, Color.White);
