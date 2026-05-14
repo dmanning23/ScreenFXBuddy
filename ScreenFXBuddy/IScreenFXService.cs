@@ -17,6 +17,8 @@ public interface IScreenFXService
     HitFlashLayer HitFlash { get; }
     AnimeSuperLayer AnimeSuper { get; }
     SpeedLinesLayer SpeedLines { get; }
+    LetterboxLayer Letterbox { get; }
+    FreezeFrameLayer FreezeFrame { get; }
 
     void TriggerForceRipple(
         Vector2 position,
@@ -55,9 +57,11 @@ public interface IScreenFXService
         EffectBlendMode blendMode = EffectBlendMode.LinearDodge,
         float time = 1f);
 
-    public void TriggerAnimeSuper(
-        Color color,
-        float duration);
+    void TriggerAnimeSuper(Color color, float flashIn = 0.05f, float hold = 0.30f, float fadeOut = 0.40f);
+
+    void TriggerLetterbox(float barHeight = 0.10f, float slideIn = 0.15f, float hold = 1.00f, float slideOut = 0.15f);
+
+    void TriggerFreezeFrame(Color tintColor, float flashIn = 0.10f, float hold = 0.40f, float fadeOut = 0.30f);
 
     public void TriggerSpeedLines(
         Vector2 position,

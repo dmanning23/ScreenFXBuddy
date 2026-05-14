@@ -56,6 +56,27 @@ namespace ScreenFXBuddy.Example
                 ScreenManager.AddScreen(new SpeedLineScreen());
             });
             AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("AnimeSuper", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new AnimeSuperScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("Letterbox", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new LetterboxScreen());
+            });
+            AddMenuEntry(entry2);
+
+            entry2 = new MenuEntry("FreezeFrame", Content);
+            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            {
+                ScreenManager.AddScreen(new FreezeFrameScreen());
+            });
+            AddMenuEntry(entry2);
         }
 
         public override void ExitScreen()

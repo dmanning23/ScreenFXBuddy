@@ -31,6 +31,8 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public HitFlashLayer HitFlash { get; private set; }
     public AnimeSuperLayer AnimeSuper { get; private set; }
     public SpeedLinesLayer SpeedLines { get; private set; }
+    public LetterboxLayer Letterbox { get; private set; }
+    public FreezeFrameLayer FreezeFrame { get; private set; }
 
     private ContentManager Content { get; set; }
 
@@ -59,11 +61,13 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         HitFlash = new HitFlashLayer(GraphicsDevice);
         AnimeSuper = new AnimeSuperLayer(GraphicsDevice);
         SpeedLines = new SpeedLinesLayer(GraphicsDevice);
+        Letterbox   = new LetterboxLayer(GraphicsDevice);
+        FreezeFrame = new FreezeFrameLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
-            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze });
+            { ForceRipple, GravityWave, ScreenShake, ChromaticAberration, HeatHaze, FreezeFrame });
         OverlayLayers.AddRange(new IOverlayLayer[]
-            { HitFlash, AnimeSuper, SpeedLines });
+            { HitFlash, AnimeSuper, Letterbox, SpeedLines });
 
         //Let's use our own content manager
         if (null == contentManager)
@@ -179,8 +183,14 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         float time = 1f)
         => HitFlash.Trigger(blendColor, mode, curve, blendMode, time);
 
-    public void TriggerAnimeSuper(Color color, float duration)
-        => AnimeSuper.Trigger(color, duration);
+    public void TriggerAnimeSuper(Color color, float flashIn = 0.05f, float hold = 0.30f, float fadeOut = 0.40f)
+        => AnimeSuper.Trigger(color, flashIn, hold, fadeOut);
+
+    public void TriggerLetterbox(float barHeight = 0.10f, float slideIn = 0.15f, float hold = 1.00f, float slideOut = 0.15f)
+        => Letterbox.Trigger(barHeight, slideIn, hold, slideOut);
+
+    public void TriggerFreezeFrame(Color tintColor, float flashIn = 0.10f, float hold = 0.40f, float fadeOut = 0.30f)
+        => FreezeFrame.Trigger(tintColor, flashIn, hold, fadeOut);
 
     public void TriggerSpeedLines(
         Vector2 position,
