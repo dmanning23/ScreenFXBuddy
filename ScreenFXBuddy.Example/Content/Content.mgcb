@@ -43,6 +43,12 @@
 /processorParam:DebugMode=Auto
 /build:../../ScreenFXBuddy/Content/Distorter_ScreenTilt.fx;Distorter_ScreenTilt.fx
 
+#begin ../../ScreenFXBuddy/Content/Overlay_Electric.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_Electric.fx;Overlay_Electric.fx
+
 #begin ../../ScreenFXBuddy/Content/Distorter_Ripple.fx
 /importer:EffectImporter
 /processor:EffectProcessor
