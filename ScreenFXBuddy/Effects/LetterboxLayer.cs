@@ -76,7 +76,7 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
         {
             State.SlidingIn  => _slideIn  > 0f ? _barHeight * (_stateAge / _slideIn)        : _barHeight,
             State.Holding    => _barHeight,
-            State.SlidingOut => _slideOut > 0f ? _barHeight * (1f - _stateAge / _slideOut)  : 0f,
+            State.SlidingOut => _slideOut > 0f ? Math.Max(0f, _barHeight * (1f - _stateAge / _slideOut)) : 0f,
             _                => 0f
         };
 
