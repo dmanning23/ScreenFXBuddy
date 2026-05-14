@@ -52,6 +52,7 @@ public class HeatHazeLayer : IDistortionLayer
         float duration = 3.0f)
     {
         if (_instances.Count >= MaxInstances) return;
+        radius = Math.Max(radius, 0.001f);
         _instances.Add(new HazeInstance(position, strength, radius, height, duration, 0f));
     }
 
