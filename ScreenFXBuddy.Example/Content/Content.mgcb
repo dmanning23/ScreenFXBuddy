@@ -37,6 +37,12 @@
 /processorParam:DebugMode=Auto
 /build:../../ScreenFXBuddy/Content/Distorter_ZoomBlur.fx;Distorter_ZoomBlur.fx
 
+#begin ../../ScreenFXBuddy/Content/Distorter_Vortex.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_Vortex.fx;Distorter_Vortex.fx
+
 #begin ../../ScreenFXBuddy/Content/Distorter_ScreenTilt.fx
 /importer:EffectImporter
 /processor:EffectProcessor
