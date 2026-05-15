@@ -16,10 +16,19 @@ namespace ScreenFXBuddy.Example
                 _screenFX.TriggerScreenTilt();
 
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D2))
-                _screenFX.TriggerScreenTilt(angle: 6.0f, duration: 0.5f);
+                _screenFX.TriggerScreenTilt(angle: 6.0f, duration: 0.4f, 0.2f);
 
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D3))
-                _screenFX.TriggerScreenTilt(angle: -3.0f, duration: 0.4f);
+                _screenFX.TriggerScreenTilt(angle: 6.0f, duration: 0.4f, 0.4f);
+
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D4))
+                _screenFX.TriggerScreenTilt(angle: 12.0f, duration: 0.4f, 0.2f);
+
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D5))
+                _screenFX.TriggerScreenTilt(angle: 12.0f, duration: 0.4f, 0.4f);
+
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D6))
+                _screenFX.TriggerScreenTilt(angle: 6.0f, duration: 1f, 0.1f);
 
             base.Update(gameTime, otherWindowHasFocus, covered);
         }

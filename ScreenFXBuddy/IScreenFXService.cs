@@ -56,8 +56,8 @@ public interface IScreenFXService
     public void TriggerHeatHaze(
         Vector2 position,
         float strength = 0.02f,
-        float radius   = 0.15f,
-        float height   = 0.40f,
+        float radius = 0.15f,
+        float height = 0.40f,
         float duration = 3.0f);
 
     public void TriggerHitFlash(
@@ -75,7 +75,7 @@ public interface IScreenFXService
 
     void TriggerZoomBlur(Vector2 position, float strength = 0.05f, float radius = 1.0f, float duration = 0.4f);
     void TriggerChromaticSplit(Vector2 position, float maxDistance = 0.05f, float duration = 0.3f);
-    void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f);
+    void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f, float delta = 0.2f);
     void TriggerElectric(Vector2 position, Color color, float radius = 0.20f, float duration = 0.60f);
     void TriggerFrost(Vector2 position, Color tintColor, float radius = 0.25f, float duration = 1.50f);
     void TriggerVortex(Vector2 position, float strength = 0.30f, float radius = 0.25f, float speed = 2.00f, float duration = 0.60f);

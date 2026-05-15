@@ -15,18 +15,41 @@ public class ScreenTiltLayer : IDistortionLayer
     private EffectParameter _pAspectRatio;
     private EffectParameter _pSceneTexture;
 
-    private record struct TiltInstance(
-        float MaxAngle,
-        float Duration,
-        float Age);
+    private float TiltDelta { get; set; }
 
-    private TiltInstance? _instance;
+    /// <summary>
+    /// this is whether to tilt the camera clockwise or counterclockwise
+    /// This flips every time the camera is tilted
+    /// It looks cooler if it tilts a different direction each time.
+    /// </summary>
+    public bool TiltLeft { get; set; } = true;
+
+    /// <summary>
+    /// This times the entire camera tilts from start to finish
+    /// </summary>
+    protected CountdownTimer WholeTimer { get; set; } = new CountdownTimer();
+
+    /// <summary>
+    /// This times an individual tilt
+    /// </summary>
+    public CountdownTimer TiltTimer { get; protected set; } = new CountdownTimer();
+
+    /// <summary>
+    /// How hard to tilt the camera.  1.0f for normal amount
+    /// </summary>
+    public float MaxTiltAngle { get; protected set; }
+
+    /// <summary>
+    /// Just tilt the hell out of the camera until I tell you to stop.
+    /// </summary>
+    private bool EndlessTilt { get; set; }
+
+    /// <summary>
+    /// Whether or not the camera is currently shaking.
+    /// </summary>
+    public bool IsActive => EndlessTilt || (!WholeTimer.Paused && WholeTimer.HasTimeRemaining);
 
     private const float SnapFraction = 0.1f;
-
-    public bool IsActive => _instance.HasValue;
-
-    //
 
     public ScreenTiltLayer(GraphicsDevice graphicsDevice)
     {
@@ -43,17 +66,84 @@ public class ScreenTiltLayer : IDistortionLayer
 
     /// <param name="angle">Peak rotation in degrees. Positive = clockwise. Try 2–5 for subtle, 5–8 for dramatic.</param>
     /// <param name="duration">Total effect duration in seconds.</param>
-    public void Trigger(float angle = 3.0f, float duration = 0.4f)
+    public void Trigger(float angle = 3.0f, float duration = 0.4f, float delta = 0.2f)
     {
-        _instance = new TiltInstance(angle, duration, 0f);
+        TiltDelta = delta;
+
+        //If the screen is currently shaking, don't change this
+        if (!IsActive)
+        {
+            //shake the opposite direction everytime a nre shake shake occurs
+            TiltLeft = !TiltLeft;
+        }
+
+        //start timing the shake
+        if (WholeTimer.HasTimeRemaining)
+        {
+            MaxTiltAngle = Math.Max(MaxTiltAngle, angle);
+
+            if (WholeTimer.RemainingTime < duration)
+            {
+                WholeTimerStart(duration);
+            }
+        }
+        else
+        {
+            MaxTiltAngle = angle;
+            WholeTimerStart(duration);
+        }
+
+        //start timing the delta
+        TiltTimer.Start(delta);
+    }
+
+    private void WholeTimerStart(float length)
+    {
+        if (length > 0)
+        {
+            EndlessTilt = false;
+            WholeTimer.Start(length);
+        }
+        else
+        {
+            EndlessTilt = true;
+        }
+    }
+
+    public void SetTilt(float length, float delta, float amount, bool endless)
+    {
+        EndlessTilt = endless;
+
+        TiltDelta = delta;
+
+        //shake the opposite direction
+        TiltLeft = !TiltLeft;
+
+        //start timing the shake
+        MaxTiltAngle = amount;
+        WholeTimerStart(length);
+
+        //start timing the delta
+        TiltTimer.Start(delta);
+    }
+
+    public void StopShake()
+    {
+        TiltTimer.Stop();
+        WholeTimer.Stop();
+        EndlessTilt = false;
     }
 
     public void Update(GameClock clock)
     {
-        if (!_instance.HasValue) return;
-        var inst = _instance.Value;
-        inst = inst with { Age = inst.Age + clock.TimeDelta };
-        _instance = inst.Age >= inst.Duration ? null : inst;
+        WholeTimer.Update(clock);
+        TiltTimer.Update(clock);
+
+        if (IsActive && !TiltTimer.Paused && !TiltTimer.HasTimeRemaining)
+        {
+            TiltLeft = !TiltLeft;
+            TiltTimer.Start(TiltDelta);
+        }
     }
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
@@ -63,19 +153,14 @@ public class ScreenTiltLayer : IDistortionLayer
             return;
         }
 
-        var inst = _instance.Value;
+        // Linear fade: full strength at start, zero at end.
+        // Endless shake stays at full strength until stopped.
+        float fade = EndlessTilt ? 1f : WholeTimer.Lerp;
 
-        float t = inst.Age / inst.Duration;
-
-        float currentAngleDeg;
-        if (t < SnapFraction)
+        float currentAngleDeg = fade * MaxTiltAngle * TiltTimer.Lerp;
+        if (TiltLeft)
         {
-            currentAngleDeg = inst.MaxAngle * (t / SnapFraction);
-        }
-        else
-        {
-            float easeT = (t - SnapFraction) / (1f - SnapFraction);
-            currentAngleDeg = inst.MaxAngle * (1f - easeT * easeT);
+            currentAngleDeg *= -1;
         }
 
         var vp = _graphicsDevice.Viewport;

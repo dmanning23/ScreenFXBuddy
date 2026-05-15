@@ -105,8 +105,10 @@ public class ScreenShakeLayer : IDistortionLayer
         ShakeTimer.Start(delta);
     }
 
-    public void SetShake(float length, float delta, float amount)
+    public void SetShake(float length, float delta, float amount, bool endless)
     {
+        EndlessShake = endless;
+        
         ShakeDelta = delta;
 
         //shake the opposite direction

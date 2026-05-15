@@ -68,14 +68,14 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         HitFlash = new HitFlashLayer(GraphicsDevice);
         AnimeSuper = new AnimeSuperLayer(GraphicsDevice);
         SpeedLines = new SpeedLinesLayer(GraphicsDevice);
-        Letterbox   = new LetterboxLayer(GraphicsDevice);
+        Letterbox = new LetterboxLayer(GraphicsDevice);
         FreezeFrame = new FreezeFrameLayer(GraphicsDevice);
-        ZoomBlur   = new ZoomBlurLayer(GraphicsDevice);
+        ZoomBlur = new ZoomBlurLayer(GraphicsDevice);
         ScreenTilt = new ScreenTiltLayer(GraphicsDevice);
         Electric = new ElectricLayer(GraphicsDevice);
-        Frost    = new FrostLayer(GraphicsDevice);
-        Vortex   = new VortexLayer(GraphicsDevice);
-        Smoke        = new SmokeLayer(GraphicsDevice);
+        Frost = new FrostLayer(GraphicsDevice);
+        Vortex = new VortexLayer(GraphicsDevice);
+        Smoke = new SmokeLayer(GraphicsDevice);
         GlassShatter = new GlassShatterLayer(GraphicsDevice);
 
         DistortionLayers.AddRange(new IDistortionLayer[]
@@ -190,8 +190,8 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public void TriggerHeatHaze(
         Vector2 position,
         float strength = 0.02f,
-        float radius   = 0.15f,
-        float height   = 0.40f,
+        float radius = 0.15f,
+        float height = 0.40f,
         float duration = 3.0f)
         => HeatHaze.Trigger(position, strength, radius, height, duration);
 
@@ -217,8 +217,8 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public void TriggerChromaticSplit(Vector2 position, float maxDistance = 0.05f, float duration = 0.3f)
         => ChromaticAberration.TriggerSplit(position, maxDistance, duration);
 
-    public void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f)
-        => ScreenTilt.Trigger(angle, duration);
+    public void TriggerScreenTilt(float angle = 3.0f, float duration = 0.4f, float delta = 0.2f)
+        => ScreenTilt.Trigger(angle, duration, delta);
 
     public void TriggerElectric(Vector2 position, Color color, float radius = 0.20f, float duration = 0.60f)
         => Electric.Trigger(position, color, radius, duration);
