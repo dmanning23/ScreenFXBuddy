@@ -1,12 +1,13 @@
 using GameTimer;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace ScreenFXBuddy.Effects;
 
 /// <summary>
 /// A single screen ripple
 /// </summary>
-public class RippleInstance
+public class HeatHazeInstance
 {
     /// <summary>
     /// The screen position of the center of this ripple
@@ -14,28 +15,26 @@ public class RippleInstance
     /// </summary>
     public Vector2 Position { get; set; }
 
-    /// <summary>
-    /// How strong this ripple effect is
-    /// This will determine the amonut of distortion to add to the shader effect
-    /// </summary>
     public float Strength { get; set; }
 
-    /// <summary>
-    /// How fast this ripple is shooting out from the position
-    /// </summary>
-    public float Speed { get; set; }
+    private float _radius;
+    public float Radius { get
+        {
+            return _radius;
+        }
+        set
+        {
+            _radius = Math.Max(value, 0.001f);
+        }
+    }
 
-    /// <summary>
-    /// How big this ripple is from the inside to the outside radius
-    /// Measured in pixels
-    /// </summary>
-    public float Size { get; set; }
+    public float Height { get; set; }
 
     /// <summary>
     /// Total lifetime of this ripple in seconds, set at construction time.
     /// Used to compute normalized age for the shader.
     /// </summary>
-    public float TotalTime { get; private set; }
+    public float Duration { get; private set; }
 
     /// <summary>
     /// Used to time the ripple effect from start to finish
@@ -47,14 +46,19 @@ public class RippleInstance
     /// </summary>
     public bool IsAlive => Timer.HasTimeRemaining;
 
-    public RippleInstance(Vector2 position, float strength = 0.05f, float speed = 0.4f, float size = 0.08f, float time = 2f)
+    public HeatHazeInstance(
+        Vector2 position,
+        float strength = 0.02f,
+        float radius = 0.15f,
+        float height = 0.40f,
+        float duration = 3.0f)
     {
         Position = position;
         Strength = strength;
-        Speed = speed;
-        Size = size;
-        TotalTime = time;
-        Timer.Start(time);
+        Radius = radius;
+        Height = height;
+        Duration = duration;
+        Timer.Start(duration);
     }
 
     public void Update(GameClock clock)

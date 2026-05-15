@@ -18,14 +18,14 @@ public class HeatHazeLayer : IDistortionLayer
     private EffectParameter _pAspectRatio;
     private EffectParameter _pTime;
 
-    private readonly List<HazeInstance> _instances = new();
+    private readonly List<HeatHazeInstance> _instances = new();
 
     private const int MaxInstances = 8;
 
     private readonly Vector4[] _originBuffer = new Vector4[MaxInstances];
     private readonly Vector4[] _stateBuffer = new Vector4[MaxInstances];
 
-    private float _time;
+    private readonly float[] _timeBuffer = new float[MaxInstances];
 
     public bool IsActive => _instances.Count > 0;
 
@@ -41,7 +41,7 @@ public class HeatHazeLayer : IDistortionLayer
         _pHazeOrigins = _effect.Parameters["HazeOrigins"];
         _pHazeState = _effect.Parameters["HazeState"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
-        _pTime = _effect.Parameters["Time"];
+        _pTime = _effect.Parameters["HazeTime"];
     }
 
     public void Trigger(
@@ -51,24 +51,19 @@ public class HeatHazeLayer : IDistortionLayer
         float height = 0.40f,
         float duration = 3.0f)
     {
-        if (_instances.Count >= MaxInstances) return;
-        radius = Math.Max(radius, 0.001f);
-        _instances.Add(new HazeInstance(position, strength, radius, height, duration, 0f));
+        _instances.Add(new HeatHazeInstance(position, strength, radius, height, duration));
     }
 
     public void Update(GameClock clock)
     {
-        float dt = clock.TimeDelta;
-        _time += dt;
-
-        for (int i = _instances.Count - 1; i >= 0; i--)
+        var i = 0;
+        while (i < _instances.Count)
         {
-            var inst = _instances[i];
-            inst = inst with { Age = inst.Age + dt };
-            if (inst.Age >= inst.Duration)
+            _instances[i].Update(clock);
+            if (!_instances[i].IsAlive)
                 _instances.RemoveAt(i);
             else
-                _instances[i] = inst;
+                i++;
         }
     }
 
@@ -95,8 +90,10 @@ public class HeatHazeLayer : IDistortionLayer
             _stateBuffer[i] = new Vector4(
                 inst.Radius,
                 inst.Height,
-                inst.Strength * (1f - inst.Age / inst.Duration),
+                inst.Strength * (1f - inst.Timer.CurrentTime / inst.Duration),
                 0f);
+
+            _timeBuffer[i] = inst.Timer.CurrentTime;
         }
 
         _graphicsDevice.SetRenderTarget(destination);
@@ -105,7 +102,7 @@ public class HeatHazeLayer : IDistortionLayer
         _pHazeOrigins.SetValue(_originBuffer);
         _pHazeState.SetValue(_stateBuffer);
         _pAspectRatio.SetValue(aspectRatio);
-        _pTime.SetValue(_time);
+        _pTime.SetValue(_timeBuffer);
 
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
@@ -113,12 +110,4 @@ public class HeatHazeLayer : IDistortionLayer
         spriteBatch.Draw(source, _graphicsDevice.Viewport.Bounds, Color.White);
         spriteBatch.End();
     }
-
-    private record struct HazeInstance(
-        Vector2 Position,
-        float Strength,
-        float Radius,
-        float Height,
-        float Duration,
-        float Age);
 }

@@ -16,7 +16,20 @@ namespace ScreenFXBuddy.Example
                 _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.05f, radius: 0.3f, height: 0.7f, duration: 4.0f);
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D3))
                 _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.04f, radius: 0.06f, height: 0.25f, duration: 2.0f);
-
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D4))
+                _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.08f, radius: 0.06f, height: 0.25f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D5))
+                _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.04f, radius: 0.12f, height: 0.25f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D6))
+                _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.04f, radius: 0.06f, height: 0.5f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D7))
+                _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.04f, radius: 0.3f, height: 0.25f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D7))
+                _screenFX.TriggerHeatHaze(new Vector2(640, 540), strength: 0.04f, radius: 0.3f, height: 1f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D8))
+                _screenFX.TriggerHeatHaze(new Vector2(440, 540), strength: 0.04f, radius: 0.3f, height: 1f, duration: 2.0f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D9))
+                _screenFX.TriggerHeatHaze(new Vector2(840, 540), strength: 0.04f, radius: 0.3f, height: 1f, duration: 2.0f);
             base.Update(gameTime, otherWindowHasFocus, covered);
         }
     }
