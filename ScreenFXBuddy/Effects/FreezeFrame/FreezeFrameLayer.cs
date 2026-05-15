@@ -56,7 +56,6 @@ public class FreezeFrameLayer : IDistortionLayer
         Timer.Update(clock);
     }
 
-
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
         if (!IsActive)

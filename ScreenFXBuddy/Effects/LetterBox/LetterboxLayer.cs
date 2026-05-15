@@ -8,19 +8,18 @@ namespace ScreenFXBuddy.Effects;
 
 public class LetterboxLayer : IOverlayLayer, IDisposable
 {
-    private enum State { Idle, SlidingIn, Holding, SlidingOut }
-
     private readonly GraphicsDevice _graphicsDevice;
     private Texture2D _blackPixel;
 
-    private State _state = State.Idle;
     private float _barHeight;
     private float _slideIn;
     private float _hold;
     private float _slideOut;
-    private float _stateAge;
 
-    public bool IsActive => _state != State.Idle;
+    private CountdownTimer Timer { get; set; } = new CountdownTimer();
+
+    public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
+
 
     public LetterboxLayer(GraphicsDevice graphicsDevice)
     {
@@ -43,29 +42,13 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
         _slideIn = slideIn;
         _hold = hold;
         _slideOut = slideOut;
-        _stateAge = 0f;
-        _state = State.SlidingIn;
+
+        Timer.Start(_slideIn + _hold + _slideOut);
     }
 
     public void Update(GameClock clock)
     {
-        if (_state == State.Idle) return;
-        _stateAge += clock.TimeDelta;
-
-        switch (_state)
-        {
-            case State.SlidingIn when _stateAge >= _slideIn:
-                _state = State.Holding;
-                _stateAge -= _slideIn;
-                break;
-            case State.Holding when _stateAge >= _hold:
-                _state = State.SlidingOut;
-                _stateAge -= _hold;
-                break;
-            case State.SlidingOut when _stateAge >= _slideOut:
-                _state = State.Idle;
-                break;
-        }
+        Timer.Update(clock);
     }
 
     public void Apply(SpriteBatch spriteBatch)
@@ -75,13 +58,20 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
             return;
         }
 
-        float currentFraction = _state switch
+        float currentFraction;
+        if (Timer.CurrentTime < _slideIn)
         {
-            State.SlidingIn => _slideIn > 0f ? _barHeight * (_stateAge / _slideIn) : _barHeight,
-            State.Holding => _barHeight,
-            State.SlidingOut => _slideOut > 0f ? Math.Max(0f, _barHeight * (1f - _stateAge / _slideOut)) : 0f,
-            _ => 0f
-        };
+            currentFraction = _slideIn > 0f ? _barHeight * (Timer.CurrentTime / _slideIn) : _barHeight;
+        }
+        else if (Timer.CurrentTime < _slideIn + _hold)
+        {
+            currentFraction = _barHeight;
+        }
+        else
+        {
+            float fadeProgress = Timer.CurrentTime - _slideIn - _hold;
+            currentFraction = _slideOut > 0f ? Math.Max(0f, _barHeight * (1f - fadeProgress / _slideOut)) : 0f;
+        }
 
         if (currentFraction <= 0f) return;
 

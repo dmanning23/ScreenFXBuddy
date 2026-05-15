@@ -22,11 +22,11 @@ public class FrostLayer : IOverlayLayer, IDisposable
     private Vector4 _tintColor;
     private float _radius;
     private float _duration;
-    private float _age;
-    private bool _active;
     private float _aspectRatio;
 
-    public bool IsActive => _active;
+    private CountdownTimer Timer { get; set; } = new CountdownTimer();
+
+    public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
     public FrostLayer(GraphicsDevice graphicsDevice)
     {
@@ -57,17 +57,13 @@ public class FrostLayer : IOverlayLayer, IDisposable
         _tintColor = tintColor.ToVector4();
         _radius = radius;
         _duration = duration;
-        _age = 0f;
-        _active = true;
+        Timer.Start(_duration);
         _aspectRatio = (float)vp.Width / vp.Height;
     }
 
     public void Update(GameClock clock)
     {
-        if (!_active) return;
-        _age += clock.TimeDelta;
-        if (_age >= _duration)
-            _active = false;
+        Timer.Update(clock);
     }
 
     public void Apply(SpriteBatch spriteBatch)
@@ -77,7 +73,7 @@ public class FrostLayer : IOverlayLayer, IDisposable
             return;
         }
 
-        float progress = MathHelper.Clamp(_age / _duration, 0f, 1f);
+        float progress = MathHelper.Clamp(Timer.CurrentTime / _duration, 0f, 1f);
         var vp = _graphicsDevice.Viewport;
 
         _pOrigin.SetValue(_origin);
