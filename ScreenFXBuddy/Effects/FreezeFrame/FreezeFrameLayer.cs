@@ -19,10 +19,10 @@ public class FreezeFrameLayer : IDistortionLayer
     private float _flashIn;
     private float _hold;
     private float _fadeOut;
-    private float _age;
-    private bool _active;
 
-    public bool IsActive => _active;
+    private CountdownTimer Timer { get; set; } = new CountdownTimer();
+
+    public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
     public FreezeFrameLayer(GraphicsDevice graphicsDevice)
     {
@@ -48,17 +48,14 @@ public class FreezeFrameLayer : IDistortionLayer
         _flashIn = flashIn;
         _hold = hold;
         _fadeOut = fadeOut;
-        _age = 0f;
-        _active = true;
+        Timer.Start(flashIn + hold + fadeOut);
     }
 
     public void Update(GameClock clock)
     {
-        if (!_active) return;
-        _age += clock.TimeDelta;
-        if (_age >= _flashIn + _hold + _fadeOut)
-            _active = false;
+        Timer.Update(clock);
     }
+
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
@@ -68,13 +65,17 @@ public class FreezeFrameLayer : IDistortionLayer
         }
 
         float intensity;
-        if (_age < _flashIn)
-            intensity = _flashIn > 0f ? _age / _flashIn : 1f;
-        else if (_age < _flashIn + _hold)
+        if (Timer.CurrentTime < _flashIn)
+        {
+            intensity = _flashIn > 0f ? Timer.CurrentTime / _flashIn : 1f;
+        }
+        else if (Timer.CurrentTime < _flashIn + _hold)
+        {
             intensity = 1f;
+        }
         else
         {
-            float fadeProgress = _age - _flashIn - _hold;
+            float fadeProgress = Timer.CurrentTime - _flashIn - _hold;
             intensity = _fadeOut > 0f ? 1f - fadeProgress / _fadeOut : 0f;
         }
 
