@@ -63,11 +63,11 @@ public class ChromaticAberrationLayer : IDistortionLayer
     /// <param name="duration">Total lifetime in seconds. Try 0.2–0.4 for a snappy hit.</param>
     public void TriggerSplit(Vector2 position, float maxDistance = 0.05f, float duration = 0.3f)
     {
-        _startPosition    = position;
+        _startPosition = position;
         _splitMaxDistance = maxDistance;
-        _splitDuration    = duration;
-        _splitAge         = 0f;
-        _mode             = AberrationMode.Split;
+        _splitDuration = duration;
+        _splitAge = 0f;
+        _mode = AberrationMode.Split;
     }
 
     public void Update(GameClock clock)
@@ -86,6 +86,11 @@ public class ChromaticAberrationLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         var viewport = _graphicsDevice.Viewport;
         var originUV = new Vector2(
             _startPosition.X / viewport.Width,

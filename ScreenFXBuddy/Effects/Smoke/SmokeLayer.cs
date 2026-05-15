@@ -37,11 +37,11 @@ public class SmokeLayer : IOverlayLayer, IDisposable
     public void LoadContent(ContentManager content)
     {
         _effect = content.Load<Effect>("Overlay_Smoke");
-        _pOrigin      = _effect.Parameters["Origin"];
-        _pSmokeColor  = _effect.Parameters["SmokeColor"];
-        _pRadius      = _effect.Parameters["Radius"];
-        _pProgress    = _effect.Parameters["Progress"];
-        _pTime        = _effect.Parameters["Time"];
+        _pOrigin = _effect.Parameters["Origin"];
+        _pSmokeColor = _effect.Parameters["SmokeColor"];
+        _pRadius = _effect.Parameters["Radius"];
+        _pProgress = _effect.Parameters["Progress"];
+        _pTime = _effect.Parameters["Time"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
 
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
@@ -74,6 +74,11 @@ public class SmokeLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;
 

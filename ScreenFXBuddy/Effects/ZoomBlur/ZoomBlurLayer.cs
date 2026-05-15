@@ -35,11 +35,11 @@ public class ZoomBlurLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect        = content.Load<Effect>("Distorter_ZoomBlur");
-        _pOrigin       = _effect.Parameters["Origin"];
-        _pStrength     = _effect.Parameters["Strength"];
-        _pRadius       = _effect.Parameters["Radius"];
-        _pAspectRatio  = _effect.Parameters["AspectRatio"];
+        _effect = content.Load<Effect>("Distorter_ZoomBlur");
+        _pOrigin = _effect.Parameters["Origin"];
+        _pStrength = _effect.Parameters["Strength"];
+        _pRadius = _effect.Parameters["Radius"];
+        _pAspectRatio = _effect.Parameters["AspectRatio"];
         _pSceneTexture = _effect.Parameters["SceneTexture"];
     }
 
@@ -62,7 +62,11 @@ public class ZoomBlurLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
-        if (!_instance.HasValue) return;
+        if (!IsActive)
+        {
+            return;
+        }
+
         var inst = _instance.Value;
 
         float t = inst.Age / inst.Duration;

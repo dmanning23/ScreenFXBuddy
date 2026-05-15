@@ -80,6 +80,11 @@ public class ForceRippleLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         float aspectRatio = (float)_graphicsDevice.Viewport.Width / _graphicsDevice.Viewport.Height;
 
         int count = Math.Min(_ripples.Count, MaxInstances);

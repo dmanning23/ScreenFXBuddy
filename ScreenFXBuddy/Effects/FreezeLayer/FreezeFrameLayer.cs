@@ -16,11 +16,11 @@ public class FreezeFrameLayer : IDistortionLayer
     private EffectParameter _pSceneTexture;
 
     private Vector4 _tintColor;
-    private float   _flashIn;
-    private float   _hold;
-    private float   _fadeOut;
-    private float   _age;
-    private bool    _active;
+    private float _flashIn;
+    private float _hold;
+    private float _fadeOut;
+    private float _age;
+    private bool _active;
 
     public bool IsActive => _active;
 
@@ -31,10 +31,10 @@ public class FreezeFrameLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect        = content.Load<Effect>("Distorter_FreezeFrame");
-        _pTintColor    = _effect.Parameters["TintColor"];
-        _pIntensity    = _effect.Parameters["Intensity"];
-        _pAspectRatio  = _effect.Parameters["AspectRatio"];
+        _effect = content.Load<Effect>("Distorter_FreezeFrame");
+        _pTintColor = _effect.Parameters["TintColor"];
+        _pIntensity = _effect.Parameters["Intensity"];
+        _pAspectRatio = _effect.Parameters["AspectRatio"];
         _pSceneTexture = _effect.Parameters["SceneTexture"];
     }
 
@@ -45,11 +45,11 @@ public class FreezeFrameLayer : IDistortionLayer
     public void Trigger(Color tintColor, float flashIn = 0.10f, float hold = 0.40f, float fadeOut = 0.30f)
     {
         _tintColor = tintColor.ToVector4();
-        _flashIn   = flashIn;
-        _hold      = hold;
-        _fadeOut   = fadeOut;
-        _age       = 0f;
-        _active    = true;
+        _flashIn = flashIn;
+        _hold = hold;
+        _fadeOut = fadeOut;
+        _age = 0f;
+        _active = true;
     }
 
     public void Update(GameClock clock)
@@ -62,7 +62,10 @@ public class FreezeFrameLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
-        if (!_active) return;
+        if (!IsActive)
+        {
+            return;
+        }
 
         float intensity;
         if (_age < _flashIn)

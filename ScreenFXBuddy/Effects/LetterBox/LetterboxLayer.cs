@@ -40,11 +40,11 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
     public void Trigger(float barHeight = 0.10f, float slideIn = 0.15f, float hold = 1.00f, float slideOut = 0.15f)
     {
         _barHeight = barHeight;
-        _slideIn   = slideIn;
-        _hold      = hold;
-        _slideOut  = slideOut;
-        _stateAge  = 0f;
-        _state     = State.SlidingIn;
+        _slideIn = slideIn;
+        _hold = hold;
+        _slideOut = slideOut;
+        _stateAge = 0f;
+        _state = State.SlidingIn;
     }
 
     public void Update(GameClock clock)
@@ -55,11 +55,11 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
         switch (_state)
         {
             case State.SlidingIn when _stateAge >= _slideIn:
-                _state    = State.Holding;
+                _state = State.Holding;
                 _stateAge -= _slideIn;
                 break;
             case State.Holding when _stateAge >= _hold:
-                _state    = State.SlidingOut;
+                _state = State.SlidingOut;
                 _stateAge -= _hold;
                 break;
             case State.SlidingOut when _stateAge >= _slideOut:
@@ -70,14 +70,17 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
-        if (_state == State.Idle) return;
+        if (!IsActive)
+        {
+            return;
+        }
 
         float currentFraction = _state switch
         {
-            State.SlidingIn  => _slideIn  > 0f ? _barHeight * (_stateAge / _slideIn)        : _barHeight,
-            State.Holding    => _barHeight,
+            State.SlidingIn => _slideIn > 0f ? _barHeight * (_stateAge / _slideIn) : _barHeight,
+            State.Holding => _barHeight,
             State.SlidingOut => _slideOut > 0f ? Math.Max(0f, _barHeight * (1f - _stateAge / _slideOut)) : 0f,
-            _                => 0f
+            _ => 0f
         };
 
         if (currentFraction <= 0f) return;

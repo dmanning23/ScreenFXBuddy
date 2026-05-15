@@ -15,10 +15,11 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
     private float _flashIn;
     private float _hold;
     private float _fadeOut;
-    private float _age;
-    private bool _active;
 
-    public bool IsActive => _active;
+    CountdownTimer Timer { get; set; } = new CountdownTimer();
+
+    public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
+
 
     public AnimeSuperLayer(GraphicsDevice graphicsDevice)
     {
@@ -41,36 +42,44 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
         _flashIn = flashIn;
         _hold    = hold;
         _fadeOut = fadeOut;
-        _age     = 0f;
-        _active  = true;
+
+        Timer.Start(flashIn + hold + fadeOut);
     }
 
     public void Update(GameClock clock)
     {
-        if (!_active) return;
-        _age += clock.TimeDelta;
-        if (_age >= _flashIn + _hold + _fadeOut)
-            _active = false;
+        Timer.Update(clock);
     }
 
     public void Apply(SpriteBatch spriteBatch)
     {
-        if (!_active) return;
+        if (!IsActive)
+        {
+            return;
+        }
 
         float alpha;
-        if (_age < _flashIn)
-            alpha = _flashIn > 0f ? _age / _flashIn : 1f;
-        else if (_age < _flashIn + _hold)
+        if (Timer.CurrentTime < _flashIn)
+        {
+            alpha = _flashIn > 0f ? Timer.CurrentTime / _flashIn : 1f;
+        }
+        else if (Timer.CurrentTime < _flashIn + _hold)
+        {
             alpha = 1f;
+        }
         else
         {
-            float fadeProgress = _age - _flashIn - _hold;
+            float fadeProgress = Timer.CurrentTime - _flashIn - _hold;
             alpha = _fadeOut > 0f ? 1f - fadeProgress / _fadeOut : 0f;
         }
 
         var vp = _graphicsDevice.Viewport;
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive,
-            SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone);
+        spriteBatch.Begin(
+            SpriteSortMode.Immediate,
+            BlendState.Additive,
+            SamplerState.LinearClamp,
+            DepthStencilState.None,
+            RasterizerState.CullNone);
         spriteBatch.Draw(_whitePixel, vp.Bounds, _color * alpha);
         spriteBatch.End();
     }

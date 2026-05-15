@@ -71,6 +71,11 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;
 

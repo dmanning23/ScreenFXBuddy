@@ -1,145 +1,83 @@
 using InputHelper;
+using System;
 using System.Threading.Tasks;
 using MenuBuddy;
 using Microsoft.Xna.Framework.Content;
+using ResolutionBuddy;
+using Microsoft.Xna.Framework;
 
 namespace ScreenFXBuddy.Example
 {
-    class MainMenuScreen : MenuStackScreen, IMainMenu
+    class MainMenuScreen : WidgetScreen, IMainMenu
     {
         public MainMenuScreen() : base("ScreenFXBuddy Test")
         {
+            CoveredByOtherScreens = true;
         }
 
         public override async Task LoadContent()
         {
             await base.LoadContent();
 
-            var entry2 = new MenuEntry("ChromaticAberration", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            var stack1 = new StackLayout(StackAlignment.Top)
             {
-                ScreenManager.AddScreen(new ChromaticAberrationScreen());
-            });
-            AddMenuEntry(entry2);
+                Horizontal = HorizontalAlignment.Left,
+                Vertical = VerticalAlignment.Top,
+                Position = new Point(Resolution.TitleSafeArea.Left, Resolution.TitleSafeArea.Top),
+                Highlightable = true,
+                Clickable = true,
+                HasOutline = true,
+            };
 
-            entry2 = new MenuEntry("ForceRipple", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new ForceRippleScreen());
-            });
-            AddMenuEntry(entry2);
+            AddScreenButton(stack1, "ChromaticAberration", () => new ChromaticAberrationScreen());
+            AddScreenButton(stack1, "ForceRipple", () => new ForceRippleScreen());
+            AddScreenButton(stack1, "GravityWave", () => new GravityWaveScreen());
+            AddScreenButton(stack1, "HitFlash", () => new HitFlashScreen());
+            AddScreenButton(stack1, "ScreenShake", () => new ScreenShakeScreen());
+            AddScreenButton(stack1, "SpeedLine", () => new SpeedLineScreen());
+            AddScreenButton(stack1, "AnimeSuper", () => new AnimeSuperScreen());
+            AddScreenButton(stack1, "Letterbox", () => new LetterboxScreen());
+            AddScreenButton(stack1, "FreezeFrame", () => new FreezeFrameScreen());
+            AddScreenButton(stack1, "ZoomBlur", () => new ZoomBlurScreen());
+            AddScreenButton(stack1, "ChromaticSplit", () => new ChromaticSplitScreen());
+            AddScreenButton(stack1, "ScreenTilt", () => new ScreenTiltScreen());
+            AddScreenButton(stack1, "Electric", () => new ElectricScreen());
+            AddScreenButton(stack1, "Frost", () => new FrostScreen());
+            AddScreenButton(stack1, "Vortex", () => new VortexScreen());
+            AddScreenButton(stack1, "HeatHaze", () => new HeatHazeScreen());
+            AddScreenButton(stack1, "Smoke", () => new SmokeScreen());
+            AddScreenButton(stack1, "GlassShatter", () => new GlassShatterScreen());
 
-            entry2 = new MenuEntry("GravityWave", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new GravityWaveScreen());
-            });
-            AddMenuEntry(entry2);
+            AddItem(stack1);
+        }
 
-            entry2 = new MenuEntry("HitFlash", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+        private void AddScreenButton(StackLayout stack, string text, Func<IScreen> screenFactory)
+        {
+            var button = new RelativeLayoutButton()
             {
-                ScreenManager.AddScreen(new HitFlashScreen());
-            });
-            AddMenuEntry(entry2);
+                Name = text,
+                TransitionObject = new WipeTransitionObject(TransitionWipeType.PopLeft),
+                Horizontal = HorizontalAlignment.Center,
+                Vertical = VerticalAlignment.Center,
+                Clickable = true,
+                HasOutline = true,
+                Highlightable = true,
+                IsTappable = true
+            };
+            var label = new Label(text, Content)
+            {
+                Horizontal = HorizontalAlignment.Center,
+                Vertical = VerticalAlignment.Center,
+                Highlightable = true,
+            };
+            button.Size = label.Rect.Size.ToVector2();
+            button.AddItem(label);
 
-            entry2 = new MenuEntry("ScreenShake", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
+            button.OnClick += ((object obj, ClickEventArgs e) =>
             {
-                ScreenManager.AddScreen(new ScreenShakeScreen());
+                ScreenManager.AddScreen(screenFactory());
             });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("SpeedLine", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new SpeedLineScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("AnimeSuper", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new AnimeSuperScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("Letterbox", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new LetterboxScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("FreezeFrame", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new FreezeFrameScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("ZoomBlur", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new ZoomBlurScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("ChromaticSplit", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new ChromaticSplitScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("ScreenTilt", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new ScreenTiltScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("Electric", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new ElectricScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("Frost", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new FrostScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("Vortex", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new VortexScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("HeatHaze", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new HeatHazeScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("Smoke", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new SmokeScreen());
-            });
-            AddMenuEntry(entry2);
-
-            entry2 = new MenuEntry("GlassShatter", Content);
-            entry2.OnClick += ((object obj, ClickEventArgs e) =>
-            {
-                ScreenManager.AddScreen(new GlassShatterScreen());
-            });
-            AddMenuEntry(entry2);
+            stack.AddItem(button);
         }
 
         public override void ExitScreen()

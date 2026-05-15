@@ -37,12 +37,12 @@ public class GlassShatterLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect       = content.Load<Effect>("Distorter_GlassShatter");
-        _pOrigin      = _effect.Parameters["Origin"];
-        _pStrength    = _effect.Parameters["Strength"];
-        _pNumCells    = _effect.Parameters["NumCells"];
-        _pSeed        = _effect.Parameters["Seed"];
-        _pShatter     = _effect.Parameters["Shatter"];
+        _effect = content.Load<Effect>("Distorter_GlassShatter");
+        _pOrigin = _effect.Parameters["Origin"];
+        _pStrength = _effect.Parameters["Strength"];
+        _pNumCells = _effect.Parameters["NumCells"];
+        _pSeed = _effect.Parameters["Seed"];
+        _pShatter = _effect.Parameters["Shatter"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
     }
 
@@ -67,14 +67,18 @@ public class GlassShatterLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
-        if (!_instance.HasValue) return;
+        if (!IsActive)
+        {
+            return;
+        }
+
         var inst = _instance.Value;
 
-        float t       = inst.Age / inst.Duration;
+        float t = inst.Age / inst.Duration;
         float shatter = (float)Math.Sin(t * Math.PI);
 
-        var vp        = _graphicsDevice.Viewport;
-        var originUV  = new Vector2(inst.Position.X / vp.Width, inst.Position.Y / vp.Height);
+        var vp = _graphicsDevice.Viewport;
+        var originUV = new Vector2(inst.Position.X / vp.Width, inst.Position.Y / vp.Height);
 
         _graphicsDevice.SetRenderTarget(destination);
 

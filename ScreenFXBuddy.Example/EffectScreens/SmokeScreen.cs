@@ -17,9 +17,11 @@ namespace ScreenFXBuddy.Example
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D3))
                 _screenFX.TriggerSmoke(new Vector2(640, 540), Color.White, radius: 0.1f, duration: 1.0f);
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D4))
-                _screenFX.TriggerSmoke(new Vector2(640, 540), Color.WhiteSmoke, radius: 10f, duration: 1.0f);
+                _screenFX.TriggerSmoke(new Vector2(640, 540), Color.WhiteSmoke, radius: 1f, duration: 1.0f);
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D5))
-                _screenFX.TriggerSmoke(new Vector2(640, 540), Color.WhiteSmoke, radius: 10f, duration: 5f);
+                _screenFX.TriggerSmoke(new Vector2(640, 540), Color.WhiteSmoke, radius: 1f, duration: 5f);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D6))
+                _screenFX.TriggerSmoke(new Vector2(640, 540), Color.WhiteSmoke, radius: 0.5f, duration: 2f);
 
 
             base.Update(gameTime, otherWindowHasFocus, covered);

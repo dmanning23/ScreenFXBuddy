@@ -23,7 +23,7 @@ public class HeatHazeLayer : IDistortionLayer
     private const int MaxInstances = 8;
 
     private readonly Vector4[] _originBuffer = new Vector4[MaxInstances];
-    private readonly Vector4[] _stateBuffer  = new Vector4[MaxInstances];
+    private readonly Vector4[] _stateBuffer = new Vector4[MaxInstances];
 
     private float _time;
 
@@ -37,18 +37,18 @@ public class HeatHazeLayer : IDistortionLayer
     public void LoadContent(ContentManager content)
     {
         _effect = content.Load<Effect>("Distorter_HeatHaze");
-        _pHazeCount   = _effect.Parameters["HazeCount"];
+        _pHazeCount = _effect.Parameters["HazeCount"];
         _pHazeOrigins = _effect.Parameters["HazeOrigins"];
-        _pHazeState   = _effect.Parameters["HazeState"];
+        _pHazeState = _effect.Parameters["HazeState"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
-        _pTime        = _effect.Parameters["Time"];
+        _pTime = _effect.Parameters["Time"];
     }
 
     public void Trigger(
         Vector2 position,
         float strength = 0.02f,
-        float radius   = 0.15f,
-        float height   = 0.40f,
+        float radius = 0.15f,
+        float height = 0.40f,
         float duration = 3.0f)
     {
         if (_instances.Count >= MaxInstances) return;
@@ -74,6 +74,11 @@ public class HeatHazeLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;
 

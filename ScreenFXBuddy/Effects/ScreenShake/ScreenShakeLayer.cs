@@ -152,6 +152,11 @@ public class ScreenShakeLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         // Linear fade: full strength at start, zero at end.
         // Endless shake stays at full strength until stopped.
         float fade = (EndlessShake || _wholeDuration <= 0f)

@@ -22,7 +22,7 @@ public class VortexLayer : IDistortionLayer
     private const int MaxInstances = 4;
 
     private readonly Vector4[] _originBuffer = new Vector4[MaxInstances];
-    private readonly Vector4[] _stateBuffer  = new Vector4[MaxInstances];
+    private readonly Vector4[] _stateBuffer = new Vector4[MaxInstances];
 
     public bool IsActive => _instances.Count > 0;
 
@@ -33,11 +33,11 @@ public class VortexLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect        = content.Load<Effect>("Distorter_Vortex");
-        _pVortexCount  = _effect.Parameters["VortexCount"];
+        _effect = content.Load<Effect>("Distorter_Vortex");
+        _pVortexCount = _effect.Parameters["VortexCount"];
         _pVortexOrigins = _effect.Parameters["VortexOrigins"];
-        _pVortexState  = _effect.Parameters["VortexState"];
-        _pAspectRatio  = _effect.Parameters["AspectRatio"];
+        _pVortexState = _effect.Parameters["VortexState"];
+        _pAspectRatio = _effect.Parameters["AspectRatio"];
     }
 
     /// <param name="position">Pixel-space position of the vortex centre.</param>
@@ -48,8 +48,8 @@ public class VortexLayer : IDistortionLayer
     public void Trigger(
         Vector2 position,
         float strength = 0.30f,
-        float radius   = 0.25f,
-        float speed    = 2.00f,
+        float radius = 0.25f,
+        float speed = 2.00f,
         float duration = 0.60f)
     {
         if (_instances.Count >= MaxInstances) return;
@@ -72,6 +72,11 @@ public class VortexLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         _graphicsDevice.SetRenderTarget(destination);
 
         var vp = _graphicsDevice.Viewport;
@@ -81,7 +86,7 @@ public class VortexLayer : IDistortionLayer
         for (int i = 0; i < count; i++)
         {
             var inst = _instances[i];
-            float t     = inst.Age / inst.Duration;
+            float t = inst.Age / inst.Duration;
             float swirl = inst.Strength * inst.Speed * (1f - t);
 
             _originBuffer[i] = new Vector4(

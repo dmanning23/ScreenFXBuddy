@@ -33,9 +33,9 @@ public class ScreenTiltLayer : IDistortionLayer
 
     public void LoadContent(ContentManager content)
     {
-        _effect        = content.Load<Effect>("Distorter_ScreenTilt");
-        _pAngle        = _effect.Parameters["Angle"];
-        _pAspectRatio  = _effect.Parameters["AspectRatio"];
+        _effect = content.Load<Effect>("Distorter_ScreenTilt");
+        _pAngle = _effect.Parameters["Angle"];
+        _pAspectRatio = _effect.Parameters["AspectRatio"];
         _pSceneTexture = _effect.Parameters["SceneTexture"];
     }
 
@@ -56,7 +56,11 @@ public class ScreenTiltLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
-        if (!_instance.HasValue) return;
+        if (!IsActive)
+        {
+            return;
+        }
+
         var inst = _instance.Value;
 
         float t = inst.Age / inst.Duration;

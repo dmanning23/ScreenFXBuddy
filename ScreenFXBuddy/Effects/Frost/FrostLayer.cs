@@ -20,11 +20,11 @@ public class FrostLayer : IOverlayLayer, IDisposable
 
     private Vector2 _origin;
     private Vector4 _tintColor;
-    private float   _radius;
-    private float   _duration;
-    private float   _age;
-    private bool    _active;
-    private float   _aspectRatio;
+    private float _radius;
+    private float _duration;
+    private float _age;
+    private bool _active;
+    private float _aspectRatio;
 
     public bool IsActive => _active;
 
@@ -35,11 +35,11 @@ public class FrostLayer : IOverlayLayer, IDisposable
 
     public void LoadContent(ContentManager content)
     {
-        _effect       = content.Load<Effect>("Overlay_Frost");
-        _pOrigin      = _effect.Parameters["Origin"];
-        _pTintColor   = _effect.Parameters["TintColor"];
-        _pRadius      = _effect.Parameters["Radius"];
-        _pProgress    = _effect.Parameters["Progress"];
+        _effect = content.Load<Effect>("Overlay_Frost");
+        _pOrigin = _effect.Parameters["Origin"];
+        _pTintColor = _effect.Parameters["TintColor"];
+        _pRadius = _effect.Parameters["Radius"];
+        _pProgress = _effect.Parameters["Progress"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
 
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
@@ -52,13 +52,13 @@ public class FrostLayer : IOverlayLayer, IDisposable
     /// <param name="duration">Total effect duration in seconds. Frost is fully expanded at duration/2.</param>
     public void Trigger(Vector2 position, Color tintColor, float radius = 0.25f, float duration = 1.50f)
     {
-        var vp       = _graphicsDevice.Viewport;
-        _origin      = new Vector2(position.X / vp.Width, position.Y / vp.Height);
-        _tintColor   = tintColor.ToVector4();
-        _radius      = radius;
-        _duration    = duration;
-        _age         = 0f;
-        _active      = true;
+        var vp = _graphicsDevice.Viewport;
+        _origin = new Vector2(position.X / vp.Width, position.Y / vp.Height);
+        _tintColor = tintColor.ToVector4();
+        _radius = radius;
+        _duration = duration;
+        _age = 0f;
+        _active = true;
         _aspectRatio = (float)vp.Width / vp.Height;
     }
 
@@ -72,7 +72,10 @@ public class FrostLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
-        if (!_active) return;
+        if (!IsActive)
+        {
+            return;
+        }
 
         float progress = MathHelper.Clamp(_age / _duration, 0f, 1f);
         var vp = _graphicsDevice.Viewport;

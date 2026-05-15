@@ -71,6 +71,11 @@ public class GravityWaveLayer : IDistortionLayer
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;
 

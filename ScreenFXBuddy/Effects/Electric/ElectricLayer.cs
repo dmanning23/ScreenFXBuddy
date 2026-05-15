@@ -40,12 +40,12 @@ public class ElectricLayer : IOverlayLayer, IDisposable
 
     public void LoadContent(ContentManager content)
     {
-        _effect       = content.Load<Effect>("Overlay_Electric");
-        _pOrigin      = _effect.Parameters["Origin"];
-        _pElecColor   = _effect.Parameters["ElecColor"];
-        _pRadius      = _effect.Parameters["Radius"];
-        _pProgress    = _effect.Parameters["Progress"];
-        _pTime        = _effect.Parameters["Time"];
+        _effect = content.Load<Effect>("Overlay_Electric");
+        _pOrigin = _effect.Parameters["Origin"];
+        _pElecColor = _effect.Parameters["ElecColor"];
+        _pRadius = _effect.Parameters["Radius"];
+        _pProgress = _effect.Parameters["Progress"];
+        _pTime = _effect.Parameters["Time"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
 
         _whitePixel = new Texture2D(_graphicsDevice, 1, 1);
@@ -80,7 +80,10 @@ public class ElectricLayer : IOverlayLayer, IDisposable
 
     public void Apply(SpriteBatch spriteBatch)
     {
-        if (_instances.Count == 0) return;
+        if (!IsActive)
+        {
+            return;
+        }
 
         var vp = _graphicsDevice.Viewport;
         float aspectRatio = (float)vp.Width / vp.Height;

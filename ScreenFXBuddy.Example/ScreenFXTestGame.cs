@@ -16,7 +16,7 @@ namespace ScreenFXBuddy.Example
 #if __IOS__ || ANDROID || WINDOWS_UAP
 	public class ScreenFXTestGame : TouchGame
 #else
-    public class ScreenFXTestGame : ControllerGame
+    public class ScreenFXTestGame : MouseGame
 #endif
     {
         #region Properties
