@@ -78,8 +78,12 @@ public class ScreenShakeLayer : IDistortionLayer
     {
         ShakeDelta = delta;
 
-        //shake the opposite direction
-        ShakeLeft = !ShakeLeft;
+        //If the screen is currently shaking, don't change this
+        if (!IsActive)
+        {
+            //shake the opposite direction everytime a nre shake shake occurs
+            ShakeLeft = !ShakeLeft;
+        }
 
         //start timing the shake
         if (WholeTimer.HasTimeRemaining)

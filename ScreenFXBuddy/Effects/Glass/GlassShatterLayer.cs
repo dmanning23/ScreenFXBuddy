@@ -23,6 +23,8 @@ public class GlassShatterLayer : IDistortionLayer
     private int NumCells{ get; set; }
     private float Seed { get; set; }
 
+    //TODO: glass shatter needs fadeIn, hold, fadeOut
+
     private CountdownTimer Timer { get; set; } = new CountdownTimer();
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;

@@ -26,6 +26,8 @@ public class ScreenTiltLayer : IDistortionLayer
 
     public bool IsActive => _instance.HasValue;
 
+    //
+
     public ScreenTiltLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;

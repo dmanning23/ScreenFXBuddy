@@ -88,6 +88,7 @@ public class HeatHazeLayer : IDistortionLayer
             _stateBuffer[i] = new Vector4(
                 inst.Radius,
                 inst.Height,
+                //TODO: this is the fadeOut strength calculation
                 inst.Strength * (1f - inst.Timer.CurrentTime / inst.Duration),
                 inst.Timer.CurrentTime);
         }
