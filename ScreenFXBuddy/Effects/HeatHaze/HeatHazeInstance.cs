@@ -18,7 +18,9 @@ public class HeatHazeInstance
     public float Strength { get; set; }
 
     private float _radius;
-    public float Radius { get
+    public float Radius
+    {
+        get
         {
             return _radius;
         }
@@ -27,6 +29,8 @@ public class HeatHazeInstance
             _radius = Math.Max(value, 0.001f);
         }
     }
+    
+    //TODO: heat haze needs fadeIn, hold, fadeOut
 
     public float Height { get; set; }
 

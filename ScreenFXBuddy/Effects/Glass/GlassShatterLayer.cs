@@ -18,17 +18,14 @@ public class GlassShatterLayer : IDistortionLayer
     private EffectParameter _pShatter;
     private EffectParameter _pAspectRatio;
 
-    private record struct ShatterInstance(
-        Vector2 Position,
-        float Strength,
-        int NumCells,
-        float Seed,
-        float Duration,
-        float Age);
+    private Vector2 Position { get; set; }
+    private float Strength { get; set; }
+    private int NumCells{ get; set; }
+    private float Seed { get; set; }
 
-    private ShatterInstance? _instance;
+    private CountdownTimer Timer { get; set; } = new CountdownTimer();
 
-    public bool IsActive => _instance.HasValue;
+    public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
     public GlassShatterLayer(GraphicsDevice graphicsDevice)
     {
@@ -53,16 +50,16 @@ public class GlassShatterLayer : IDistortionLayer
     public void Trigger(Vector2 position, float strength = 0.04f, int numCells = 20, float duration = 0.8f)
     {
         if (numCells < 2) numCells = 2;
-        float seed = Random.Shared.NextSingle() * 1000f;
-        _instance = new ShatterInstance(position, strength, numCells, seed, duration, 0f);
+        Seed = Random.Shared.NextSingle() * 1000f;
+        Position = position;
+        Strength = strength;
+        NumCells = numCells;
+        Timer.Start(duration);
     }
 
     public void Update(GameClock clock)
     {
-        if (!_instance.HasValue) return;
-        var inst = _instance.Value;
-        inst = inst with { Age = inst.Age + clock.TimeDelta };
-        _instance = inst.Age >= inst.Duration ? null : inst;
+        Timer.Update(clock);
     }
 
     public void Apply(SpriteBatch spriteBatch, RenderTarget2D source, RenderTarget2D destination)
@@ -72,20 +69,17 @@ public class GlassShatterLayer : IDistortionLayer
             return;
         }
 
-        var inst = _instance.Value;
-
-        float t = inst.Age / inst.Duration;
-        float shatter = (float)Math.Sin(t * Math.PI);
+        float shatter = (float)Math.Sin(Timer.Lerp * Math.PI);
 
         var vp = _graphicsDevice.Viewport;
-        var originUV = new Vector2(inst.Position.X / vp.Width, inst.Position.Y / vp.Height);
+        var originUV = new Vector2(Position.X / vp.Width, Position.Y / vp.Height);
 
         _graphicsDevice.SetRenderTarget(destination);
 
         _pOrigin.SetValue(originUV);
-        _pStrength.SetValue(inst.Strength);
-        _pNumCells.SetValue((float)inst.NumCells);
-        _pSeed.SetValue(inst.Seed);
+        _pStrength.SetValue(Strength);
+        _pNumCells.SetValue((float)NumCells);
+        _pSeed.SetValue(Seed);
         _pShatter.SetValue(shatter);
         _pAspectRatio.SetValue((float)vp.Width / vp.Height);
 

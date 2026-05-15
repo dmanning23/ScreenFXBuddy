@@ -25,8 +25,6 @@ public class HeatHazeLayer : IDistortionLayer
     private readonly Vector4[] _originBuffer = new Vector4[MaxInstances];
     private readonly Vector4[] _stateBuffer = new Vector4[MaxInstances];
 
-    private readonly float[] _timeBuffer = new float[MaxInstances];
-
     public bool IsActive => _instances.Count > 0;
 
     public HeatHazeLayer(GraphicsDevice graphicsDevice)
@@ -41,7 +39,6 @@ public class HeatHazeLayer : IDistortionLayer
         _pHazeOrigins = _effect.Parameters["HazeOrigins"];
         _pHazeState = _effect.Parameters["HazeState"];
         _pAspectRatio = _effect.Parameters["AspectRatio"];
-        _pTime = _effect.Parameters["HazeTime"];
     }
 
     public void Trigger(
@@ -87,13 +84,12 @@ public class HeatHazeLayer : IDistortionLayer
 
             _originBuffer[i] = new Vector4(originX, originY, 0f, 0f);
 
+            //TODO: strength needs to be calculated in instance, not here
             _stateBuffer[i] = new Vector4(
                 inst.Radius,
                 inst.Height,
                 inst.Strength * (1f - inst.Timer.CurrentTime / inst.Duration),
-                0f);
-
-            _timeBuffer[i] = inst.Timer.CurrentTime;
+                inst.Timer.CurrentTime);
         }
 
         _graphicsDevice.SetRenderTarget(destination);
@@ -102,7 +98,6 @@ public class HeatHazeLayer : IDistortionLayer
         _pHazeOrigins.SetValue(_originBuffer);
         _pHazeState.SetValue(_stateBuffer);
         _pAspectRatio.SetValue(aspectRatio);
-        _pTime.SetValue(_timeBuffer);
 
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
             SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,

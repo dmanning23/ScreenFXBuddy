@@ -22,7 +22,6 @@ float  HazeCount;
 float4 HazeOrigins[8];   // .xy = (originX_uv, originY_uv)
 float4 HazeState[8];     // .x = radius_uv, .y = height_uv, .z = strength (pre-faded)
 float  AspectRatio;
-float  HazeTime[8];
 
 struct VertexShaderOutput
 {
@@ -44,7 +43,7 @@ float4 PS(VertexShaderOutput input) : COLOR
         float radius   = HazeState[i].x;
         float height   = HazeState[i].y;
         float strength = HazeState[i].z;
-        float time = HazeTime[i];
+        float time = HazeState[i].w;
 
         float dx = uv.x - originX;
         float dy = originY - uv.y;
