@@ -29,24 +29,24 @@ namespace ScreenFXBuddy.Example
                 HasOutline = true,
             };
 
-            AddScreenButton(stack1, "ChromaticAberration", () => new ChromaticAberrationScreen());
-            AddScreenButton(stack1, "ForceRipple", () => new ForceRippleScreen());
-            AddScreenButton(stack1, "GravityWave", () => new GravityWaveScreen());
-            AddScreenButton(stack1, "HitFlash", () => new HitFlashScreen());
-            AddScreenButton(stack1, "ScreenShake", () => new ScreenShakeScreen());
-            AddScreenButton(stack1, "SpeedLine", () => new SpeedLineScreen());
             AddScreenButton(stack1, "AnimeSuper", () => new AnimeSuperScreen());
-            AddScreenButton(stack1, "Letterbox", () => new LetterboxScreen());
-            AddScreenButton(stack1, "FreezeFrame", () => new FreezeFrameScreen());
-            AddScreenButton(stack1, "ZoomBlur", () => new ZoomBlurScreen());
+            AddScreenButton(stack1, "ChromaticAberration", () => new ChromaticAberrationScreen());
             AddScreenButton(stack1, "ChromaticSplit", () => new ChromaticSplitScreen());
-            AddScreenButton(stack1, "ScreenTilt", () => new ScreenTiltScreen());
             AddScreenButton(stack1, "Electric", () => new ElectricScreen());
+            AddScreenButton(stack1, "ForceRipple", () => new ForceRippleScreen());
+            AddScreenButton(stack1, "FreezeFrame", () => new FreezeFrameScreen());
             AddScreenButton(stack1, "Frost", () => new FrostScreen());
-            AddScreenButton(stack1, "Vortex", () => new VortexScreen());
-            AddScreenButton(stack1, "HeatHaze", () => new HeatHazeScreen());
-            AddScreenButton(stack1, "Smoke", () => new SmokeScreen());
             AddScreenButton(stack1, "GlassShatter", () => new GlassShatterScreen());
+            AddScreenButton(stack1, "GravityWave", () => new GravityWaveScreen());
+            AddScreenButton(stack1, "HeatHaze", () => new HeatHazeScreen());
+            AddScreenButton(stack1, "HitFlash", () => new HitFlashScreen());
+            AddScreenButton(stack1, "Letterbox", () => new LetterboxScreen());
+            AddScreenButton(stack1, "ScreenShake", () => new ScreenShakeScreen());
+            AddScreenButton(stack1, "ScreenTilt", () => new ScreenTiltScreen());
+            AddScreenButton(stack1, "Smoke", () => new SmokeScreen());
+            AddScreenButton(stack1, "SpeedLine", () => new SpeedLineScreen());
+            AddScreenButton(stack1, "Vortex", () => new VortexScreen());
+            AddScreenButton(stack1, "ZoomBlur", () => new ZoomBlurScreen());
 
             AddItem(stack1);
         }
