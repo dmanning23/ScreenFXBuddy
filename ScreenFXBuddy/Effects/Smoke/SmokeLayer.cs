@@ -21,11 +21,7 @@ public class SmokeLayer : IOverlayLayer, IDisposable
     private EffectParameter _pTime;
     private EffectParameter _pAspectRatio;
 
-    private float _time;
-
     private const int MaxInstances = 4;
-
-    private record struct SmokeInstance(Vector2 Position, Vector4 Color, float Radius, float Duration, float Age);
 
     public bool IsActive => _instances.Count > 0;
 
@@ -50,25 +46,19 @@ public class SmokeLayer : IOverlayLayer, IDisposable
 
     public void Trigger(Vector2 position, Color color, float radius = 0.15f, float duration = 2.0f)
     {
-        if (_instances.Count >= MaxInstances)
-            return;
-
-        _instances.Add(new SmokeInstance(position, color.ToVector4(), radius, duration, 0f));
+        _instances.Add(new SmokeInstance(position, color, radius, duration));
     }
 
     public void Update(GameClock clock)
     {
-        float dt = clock.TimeDelta;
-        _time += dt;
-
-        for (int i = _instances.Count - 1; i >= 0; i--)
+        var i = 0;
+        while (i < _instances.Count)
         {
-            var inst = _instances[i];
-            inst = inst with { Age = inst.Age + dt };
-            if (inst.Age >= inst.Duration)
+            _instances[i].Update(clock);
+            if (!_instances[i].IsAlive)
                 _instances.RemoveAt(i);
             else
-                _instances[i] = inst;
+                i++;
         }
     }
 
@@ -88,13 +78,13 @@ public class SmokeLayer : IOverlayLayer, IDisposable
                 inst.Position.X / vp.Width,
                 inst.Position.Y / vp.Height);
 
-            float progress = MathHelper.Clamp(inst.Age / inst.Duration, 0f, 1f);
+            float progress = MathHelper.Clamp(1f - inst.Timer.Lerp, 0f, 1f);
 
             _pOrigin.SetValue(uvOrigin);
-            _pSmokeColor.SetValue(inst.Color);
+            _pSmokeColor.SetValue(inst.Color.ToVector4());
             _pRadius.SetValue(inst.Radius);
             _pProgress.SetValue(progress);
-            _pTime.SetValue(_time);
+            _pTime.SetValue(inst.Timer.CurrentTime);
             _pAspectRatio.SetValue(aspectRatio);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
