@@ -47,26 +47,26 @@ public class VortexLayer : IDistortionLayer
     /// <param name="duration">Total effect duration in seconds.</param>
     public void Trigger(
         Vector2 position,
-        float strength = 0.30f,
         float radius = 0.25f,
-        float speed = 2.00f,
-        float duration = 0.60f)
+        float speed = 1f,
+        float spinInTime = 0.3f,
+        float spinOutTime = 0.3f,
+        FadeCurve fadeCurve = FadeCurve.Linear,
+        bool clockwise = true)
     {
-        if (_instances.Count >= MaxInstances) return;
-        _instances.Add(new VortexInstance(position, strength, radius, speed, duration, 0f));
+        _instances.Add(new VortexInstance(position, radius, speed, spinInTime, spinOutTime, fadeCurve, clockwise));
     }
 
     public void Update(GameClock clock)
     {
-        float dt = clock.TimeDelta;
-        for (int i = _instances.Count - 1; i >= 0; i--)
+        var i = 0;
+        while (i < _instances.Count)
         {
-            var inst = _instances[i];
-            inst = inst with { Age = inst.Age + dt };
-            if (inst.Age >= inst.Duration)
+            _instances[i].Update(clock);
+            if (!_instances[i].IsAlive)
                 _instances.RemoveAt(i);
             else
-                _instances[i] = inst;
+                i++;
         }
     }
 
@@ -86,15 +86,13 @@ public class VortexLayer : IDistortionLayer
         for (int i = 0; i < count; i++)
         {
             var inst = _instances[i];
-            float t = inst.Age / inst.Duration;
-            float swirl = inst.Strength * inst.Speed * (1f - t);
 
             _originBuffer[i] = new Vector4(
                 inst.Position.X / vp.Width,
                 inst.Position.Y / vp.Height,
                 0f, 0f);
 
-            _stateBuffer[i] = new Vector4(swirl, inst.Radius, 0f, 0f);
+            _stateBuffer[i] = new Vector4(inst.SwirlAmount(), inst.Radius, 0f, 0f);
         }
 
         _pVortexCount.SetValue((float)count);
@@ -108,12 +106,4 @@ public class VortexLayer : IDistortionLayer
         spriteBatch.Draw(source, vp.Bounds, Color.White);
         spriteBatch.End();
     }
-
-    private record struct VortexInstance(
-        Vector2 Position,
-        float Strength,
-        float Radius,
-        float Speed,
-        float Duration,
-        float Age);
 }

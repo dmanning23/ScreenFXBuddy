@@ -226,8 +226,14 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     public void TriggerFrost(Vector2 position, Color tintColor, float radius = 0.25f, float duration = 1.50f)
         => Frost.Trigger(position, tintColor, radius, duration);
 
-    public void TriggerVortex(Vector2 position, float strength = 0.30f, float radius = 0.25f, float speed = 2.00f, float duration = 0.60f)
-        => Vortex.Trigger(position, strength, radius, speed, duration);
+    public void TriggerVortex(Vector2 position,
+        float radius = 0.25f,
+        float speed = 1f,
+        float spinInTime = 0.3f,
+        float spinOutTime = 0.3f,
+        FadeCurve fadeCurve = FadeCurve.Linear,
+        bool clockwise = true)
+        => Vortex.Trigger(position, radius, speed, spinInTime, spinOutTime, fadeCurve, clockwise);
 
     public void TriggerSmoke(Vector2 position, Color color, float radius = 0.15f, float duration = 2.0f)
         => Smoke.Trigger(position, color, radius, duration);
