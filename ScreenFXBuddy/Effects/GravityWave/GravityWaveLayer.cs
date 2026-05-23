@@ -18,7 +18,7 @@ public class GravityWaveLayer : IDistortionLayer
     private EffectParameter _pAspectRatio;
     private EffectParameter _pBandWidth;
 
-    private readonly List<WaveInstance> _instances = new();
+    private readonly List<GravityWaveInstance> _instances = new();
 
     private const int MaxInstances = 8;
     private const float BandWidth = 0.06f;
@@ -51,21 +51,19 @@ public class GravityWaveLayer : IDistortionLayer
         float speed = 0.5f,
         float duration = 1.5f)
     {
-        if (_instances.Count >= MaxInstances) return;
-        _instances.Add(new WaveInstance(position, strength, startHeight, endHeight, speed, duration, 0f));
+        _instances.Add(new GravityWaveInstance(position, strength, startHeight, endHeight, speed, duration));
     }
 
     public void Update(GameClock clock)
     {
-        float dt = clock.TimeDelta;
-        for (int i = _instances.Count - 1; i >= 0; i--)
+        var i = 0;
+        while (i < _instances.Count)
         {
-            var inst = _instances[i];
-            inst = inst with { Age = inst.Age + dt };
-            if (inst.Age >= inst.Duration)
+            _instances[i].Update(clock);
+            if (!_instances[i].IsAlive)
                 _instances.RemoveAt(i);
             else
-                _instances[i] = inst;
+                i++;
         }
     }
 
@@ -83,7 +81,6 @@ public class GravityWaveLayer : IDistortionLayer
         for (int i = 0; i < count; i++)
         {
             var inst = _instances[i];
-            float t = inst.Age / inst.Duration;
 
             _originBuffer[i] = new Vector4(
                 inst.Position.X / vp.Width,
@@ -91,9 +88,9 @@ public class GravityWaveLayer : IDistortionLayer
                 0f, 0f);
 
             _stateBuffer[i] = new Vector4(
-                inst.Age * inst.Speed,
-                MathHelper.Lerp(inst.StartHeight, inst.EndHeight, t),
-                inst.Strength * (1f - t),
+                inst.Timer.CurrentTime * inst.Speed,
+                inst.Timer.LerpValues(inst.StartHeight, inst.EndHeight),
+                inst.Strength * inst.Timer.Lerp,
                 0f);
         }
 
@@ -110,13 +107,4 @@ public class GravityWaveLayer : IDistortionLayer
         spriteBatch.Draw(source, _graphicsDevice.Viewport.Bounds, Color.White);
         spriteBatch.End();
     }
-
-    private record struct WaveInstance(
-        Vector2 Position,
-        float Strength,
-        float StartHeight,
-        float EndHeight,
-        float Speed,
-        float Duration,
-        float Age);
 }
