@@ -52,9 +52,9 @@ namespace ScreenFXBuddy.Example
                 _screenFX.TriggerVortex(new Vector2(900, 300), radius: 0.2f, speed: 1.0f, spinInTime: 0.5f, spinOutTime: 0.5f, fadeCurve: FadeCurve.Exponential);
 
             if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.P))
-                _screenFX.TriggerVortex(new Vector2(900, 300), radius: 0.3f, speed: 0.2f, spinInTime: 0.1f, spinOutTime: 0.5f, fadeCurve: FadeCurve.Exponential);
-
-
+                _screenFX.TriggerVortex(new Vector2(900, 300), radius: 0.35f, speed: 0.4f, spinInTime: 0.2f, spinOutTime: 0.4f, fadeCurve: FadeCurve.Logarithmic);
+            if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.O))
+                _screenFX.TriggerVortex(new Vector2(900, 300), radius: 0.35f, speed: 0.4f, spinInTime: 0.2f, spinOutTime: 0.4f, fadeCurve: FadeCurve.Exponential);
 
             base.Update(gameTime, otherWindowHasFocus, covered);
         }
