@@ -16,7 +16,6 @@ public class HeatHazeLayer : IDistortionLayer
     private EffectParameter _pHazeOrigins;
     private EffectParameter _pHazeState;
     private EffectParameter _pAspectRatio;
-    private EffectParameter _pTime;
 
     private readonly List<HeatHazeInstance> _instances = new();
 
