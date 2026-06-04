@@ -1,6 +1,3 @@
-
-//using AnimationTool.Screens;
-using InputHelper;
 using MenuBuddy;
 using Microsoft.Xna.Framework;
 using ResolutionBuddy;
@@ -77,20 +74,19 @@ namespace ScreenFXBuddy.Example
         /// <returns>The gameplay screen stack.</returns>
         public override IScreen[] GetMainMenuScreenStack()
         {
-            //return new IScreen[] { new BackgroundScreen(), new MainMenuScreen() };
-            return new IScreen[] { new BackgroundCameraScreen(), new MainMenuScreen() };
+            return new IScreen[] { new BackgroundScreen(), new MainMenuScreen() };
         }
 
         protected override bool BeginDraw()
         {
-            //_screenFX.BeginCapture(new Point(Resolution.ScreenArea.Width, Resolution.ScreenArea.Height));
+            _screenFX.BeginCapture(new Point(Resolution.ScreenArea.Width, Resolution.ScreenArea.Height));
 
             return base.BeginDraw();
         }
 
         protected override void EndDraw()
         {
-            //_screenFX.EndCapture(Resolution.TransformationMatrix(), Resolution.ResetViewport);
+            _screenFX.EndCapture(Resolution.TransformationMatrix(), Resolution.ResetViewport);
 
             base.EndDraw();
         }

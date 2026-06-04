@@ -2,7 +2,6 @@ using InputHelper;
 using System;
 using System.Threading.Tasks;
 using MenuBuddy;
-using Microsoft.Xna.Framework.Content;
 using ResolutionBuddy;
 using Microsoft.Xna.Framework;
 
