@@ -1,0 +1,117 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+
+#---------------------------------- Content ---------------------------------#
+
+#begin ../../ScreenFXBuddy/Content/Distorter_ChromaticAberration.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ChromaticAberration.fx;Distorter_ChromaticAberration.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_FreezeFrame.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_FreezeFrame.fx;Distorter_FreezeFrame.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_GlassShatter.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_GlassShatter.fx;Distorter_GlassShatter.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_GravityWave.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_GravityWave.fx;Distorter_GravityWave.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_HeatHaze.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_HeatHaze.fx;Distorter_HeatHaze.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_Ripple.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_Ripple.fx;Distorter_Ripple.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_ScreenShake.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ScreenShake.fx;Distorter_ScreenShake.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_ScreenTilt.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ScreenTilt.fx;Distorter_ScreenTilt.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_Vortex.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_Vortex.fx;Distorter_Vortex.fx
+
+#begin ../../ScreenFXBuddy/Content/Distorter_ZoomBlur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Distorter_ZoomBlur.fx;Distorter_ZoomBlur.fx
+
+#begin ../../ScreenFXBuddy/Content/Overlay_Electric.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_Electric.fx;Overlay_Electric.fx
+
+#begin ../../ScreenFXBuddy/Content/Overlay_Frost.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_Frost.fx;Overlay_Frost.fx
+
+#begin ../../ScreenFXBuddy/Content/Overlay_Smoke.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_Smoke.fx;Overlay_Smoke.fx
+
+#begin ../../ScreenFXBuddy/Content/Overlay_SpeedLines.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../../ScreenFXBuddy/Content/Overlay_SpeedLines.fx;Overlay_SpeedLines.fx
+
+#begin Braid_screenshot8.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Braid_screenshot8.jpg
+
+#begin Debug_Color.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Debug_Color.fx
+

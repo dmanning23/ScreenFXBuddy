@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenFXBuddy", "ScreenFXBu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenFXBuddy.Example", "ScreenFXBuddy.Example\ScreenFXBuddy.Example.csproj", "{4AF6287E-474F-41B5-BB6F-370D1E8775D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleExample", "SimpleExample\SimpleExample.csproj", "{4AF6287E-474F-41B5-BB6F-370D1E8775D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraExample", "CameraExample\CameraExample.csproj", "{4AF6287E-474F-41B5-BB6F-370D1E8775D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

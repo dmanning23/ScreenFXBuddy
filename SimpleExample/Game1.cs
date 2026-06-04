@@ -5,7 +5,7 @@ using ScreenFXBuddy;
 using ScreenFXBuddy.Effects;
 using GameTimer;
 
-namespace ScreenFXBuddy.Example;
+namespace SimpleExample;
 
 public class Game1 : Game
 {

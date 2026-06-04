@@ -126,7 +126,10 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
 
     public void EndCapture(Matrix? transformMatrix = null, Action resetViewport = null)
     {
-        if (!_capturing) return;
+        if (!_capturing)
+        {
+            return;
+        }
         _capturing = false;
 
         // Ping-pong through distortion layers.

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ScreenFXBuddy.Effects;
+using System;
 
 namespace ScreenFXBuddy;
 
@@ -99,4 +100,8 @@ public interface IScreenFXService
         int lineCount = 24,
         float maxRadius = 1.0f,
         float duration = 1f);
+
+    void BeginCapture(Point? virtualResolution = null);
+
+    void EndCapture(Matrix? transformMatrix = null, Action resetViewport = null);
 }

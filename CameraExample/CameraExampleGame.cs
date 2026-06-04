@@ -1,12 +1,9 @@
-
-//using AnimationTool.Screens;
-using InputHelper;
 using MenuBuddy;
 using Microsoft.Xna.Framework;
-using ResolutionBuddy;
 using GameTimer;
+using ScreenFXBuddy;
 
-namespace ScreenFXBuddy.Example
+namespace CameraExample
 {
     /// <summary>
     /// This is the main type for your game
@@ -14,9 +11,9 @@ namespace ScreenFXBuddy.Example
     //public class Game1 : ControllerGame
 
 #if __IOS__ || ANDROID || WINDOWS_UAP
-	public class ScreenFXTestGame : TouchGame
+	public class CameraExampleGame : TouchGame
 #else
-    public class ScreenFXTestGame : MouseGame
+    public class CameraExampleGame : MouseGame
 #endif
     {
         #region Properties
@@ -29,7 +26,7 @@ namespace ScreenFXBuddy.Example
 
         #region Methods
 
-        public ScreenFXTestGame()
+        public CameraExampleGame()
         {
             IsMouseVisible = true;
 
@@ -78,7 +75,7 @@ namespace ScreenFXBuddy.Example
         public override IScreen[] GetMainMenuScreenStack()
         {
             //return new IScreen[] { new BackgroundScreen(), new MainMenuScreen() };
-            return new IScreen[] { new BackgroundCameraScreen(), new MainMenuScreen() };
+            return new IScreen[] { new BackgroundCameraScreen() };
         }
 
         protected override bool BeginDraw()
