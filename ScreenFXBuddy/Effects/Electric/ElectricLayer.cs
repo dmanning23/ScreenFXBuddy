@@ -25,9 +25,12 @@ public class ElectricLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => _instances.Count > 0;
 
-    public ElectricLayer(GraphicsDevice graphicsDevice)
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
+    public ElectricLayer(GraphicsDevice graphicsDevice, Func<Vector2, Vector2> positionProvider)
     {
         _graphicsDevice = graphicsDevice;
+        PositionProvider = positionProvider;
     }
 
     public void LoadContent(ContentManager content)
@@ -76,7 +79,8 @@ public class ElectricLayer : IOverlayLayer, IDisposable
         foreach (var inst in _instances)
         {
             float progress = inst.Timer.Lerp;
-            var uvOrigin = new Vector2(inst.Position.X / vp.Width, inst.Position.Y / vp.Height);
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+            var uvOrigin = new Vector2(position.X / vp.Width, position.Y / vp.Height);
 
             _pOrigin.SetValue(uvOrigin);
             _pElecColor.SetValue(inst.Color.ToVector4());

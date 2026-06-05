@@ -20,6 +20,27 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
     private bool _capturing;
     private Point _renderTargetSize;
 
+    private Func<Vector2, Vector2> _positionProvider;
+    public Func<Vector2, Vector2> PositionProvider
+    {
+        get
+        {
+            return _positionProvider;
+        }
+        set
+        {
+            _positionProvider = value;
+            foreach (var layer in DistortionLayers)
+            {
+                layer.PositionProvider = PositionProvider;
+            }
+            foreach (var layer in OverlayLayers)
+            {
+                layer.PositionProvider = PositionProvider;
+            }
+        }
+    }
+
     public List<IDistortionLayer> DistortionLayers { get; } = new();
     public List<IOverlayLayer> OverlayLayers { get; } = new();
 
@@ -43,10 +64,11 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
 
     private ContentManager Content { get; set; }
 
-    public ScreenFXComponent(Game game)
+    public ScreenFXComponent(Game game, Func<Vector2, Vector2> positionProvider = null)
     {
         Game = game;
         Game.Services.AddService<IScreenFXService>(this);
+        PositionProvider = positionProvider;
     }
 
     public void LoadContent(ContentManager contentManager = null)
@@ -60,10 +82,10 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         _pingTarget = CreateTarget(_renderTargetSize);
         _pongTarget = CreateTarget(_renderTargetSize);
 
-        ForceRipple = new ForceRippleLayer(GraphicsDevice);
+        ForceRipple = new ForceRippleLayer(GraphicsDevice, PositionProvider);
         GravityWave = new GravityWaveLayer(GraphicsDevice);
         ScreenShake = new ScreenShakeLayer(GraphicsDevice);
-        ChromaticAberration = new ChromaticAberrationLayer(GraphicsDevice);
+        ChromaticAberration = new ChromaticAberrationLayer(GraphicsDevice, PositionProvider);
         HeatHaze = new HeatHazeLayer(GraphicsDevice);
         HitFlash = new HitFlashLayer(GraphicsDevice);
         AnimeSuper = new AnimeSuperLayer(GraphicsDevice);
@@ -72,7 +94,7 @@ public class ScreenFXComponent : IScreenFXService, IDisposable
         FreezeFrame = new FreezeFrameLayer(GraphicsDevice);
         ZoomBlur = new ZoomBlurLayer(GraphicsDevice);
         ScreenTilt = new ScreenTiltLayer(GraphicsDevice);
-        Electric = new ElectricLayer(GraphicsDevice);
+        Electric = new ElectricLayer(GraphicsDevice, PositionProvider);
         Frost = new FrostLayer(GraphicsDevice);
         Vortex = new VortexLayer(GraphicsDevice);
         Smoke = new SmokeLayer(GraphicsDevice);

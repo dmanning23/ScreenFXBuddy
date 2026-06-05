@@ -75,6 +75,8 @@ public class HitFlashLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => _flashes.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public HitFlashLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;

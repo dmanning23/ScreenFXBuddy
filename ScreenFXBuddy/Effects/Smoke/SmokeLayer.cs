@@ -25,6 +25,8 @@ public class SmokeLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public SmokeLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -74,9 +76,11 @@ public class SmokeLayer : IOverlayLayer, IDisposable
 
         foreach (var inst in _instances)
         {
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+
             var uvOrigin = new Vector2(
-                inst.Position.X / vp.Width,
-                inst.Position.Y / vp.Height);
+                position.X / vp.Width,
+                position.Y / vp.Height);
 
             float progress = MathHelper.Clamp(1f - inst.Timer.Lerp, 0f, 1f);
 

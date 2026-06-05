@@ -95,6 +95,7 @@ public class BackgroundCameraScreen : Screen, IMainMenu
         _texture = Content.Load<Texture2D>("Braid_screenshot8");
 
         _screenFX = ScreenManager.Game.Services.GetService<IScreenFXService>();
+        _screenFX.PositionProvider = (Vector2 inst) => MatrixExt.Multiply(_camera.TranslationMatrix, inst);
     }
 
     public override void Update(GameTime gameTime, bool otherWindowHasFocus, bool covered)
@@ -126,12 +127,6 @@ public class BackgroundCameraScreen : Screen, IMainMenu
             _circle1.Translate(-circleMovementSpeed * _clock.TimeDelta, 0.0f);
         }
 
-        /*
-        TODO: HERE IS THE BUG:
-        The force ripple should be centered over the red circle.
-        Instead, the force ripple is always center screen, since that was the location 
-        the red circle was initialized at. It is ignoring the camera matrix.
-        */
         if (ScreenManager.Input.InputState.IsNewKeyPress(Keys.D1))
             _screenFX.TriggerForceRipple(_circle2.Pos);
 

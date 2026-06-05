@@ -38,9 +38,12 @@ public class ForceRippleLayer : IDistortionLayer
 
     public bool IsActive => _ripples.Count > 0;
 
-    public ForceRippleLayer(GraphicsDevice graphicsDevice)
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
+    public ForceRippleLayer(GraphicsDevice graphicsDevice, Func<Vector2, Vector2> positionProvider)
     {
         _graphicsDevice = graphicsDevice;
+        PositionProvider = positionProvider;
     }
 
     public void LoadContent(ContentManager content)
@@ -98,8 +101,9 @@ public class ForceRippleLayer : IDistortionLayer
             float innerRadius = Math.Max(0f, outerRadius - r.Size);
 
             // Calculate the position
-            var x = r.Position.X / (float)_graphicsDevice.Viewport.Width;
-            var y = r.Position.Y / (float)_graphicsDevice.Viewport.Height;
+            var position = PositionProvider?.Invoke(r.Position) ?? r.Position;
+            var x = position.X / (float)_graphicsDevice.Viewport.Width;
+            var y = position.Y / (float)_graphicsDevice.Viewport.Height;
 
             //Calculat the remaining strength
             var remainingStrength = r.Strength * r.Timer.Lerp;

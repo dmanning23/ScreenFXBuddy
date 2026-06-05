@@ -56,6 +56,8 @@ public class ScreenShakeLayer : IDistortionLayer
     /// </summary>
     public bool IsActive => EndlessShake || (!WholeTimer.Paused && WholeTimer.HasTimeRemaining);
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public ScreenShakeLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -108,7 +110,7 @@ public class ScreenShakeLayer : IDistortionLayer
     public void SetShake(float length, float delta, float amount, bool endless)
     {
         EndlessShake = endless;
-        
+
         ShakeDelta = delta;
 
         //shake the opposite direction

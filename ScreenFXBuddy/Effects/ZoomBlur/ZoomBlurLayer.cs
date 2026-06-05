@@ -26,6 +26,8 @@ public class ZoomBlurLayer : IDistortionLayer
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public ZoomBlurLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -77,8 +79,10 @@ public class ZoomBlurLayer : IDistortionLayer
         {
             var inst = _instances[i];
 
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+
             float currentStrength = inst.PeakStrength * MathF.Sin(inst.Timer.Lerp * MathF.PI);
-            var originUV = new Vector2(inst.Position.X / vp.Width, inst.Position.Y / vp.Height);
+            var originUV = new Vector2(position.X / vp.Width, position.Y / vp.Height);
 
             _originBuffer[i] = new Vector4(
                 originUV.X,

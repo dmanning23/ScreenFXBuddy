@@ -26,6 +26,8 @@ public class HeatHazeLayer : IDistortionLayer
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public HeatHazeLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -78,8 +80,10 @@ public class HeatHazeLayer : IDistortionLayer
         {
             var inst = _instances[i];
 
-            float originX = inst.Position.X / vp.Width;
-            float originY = inst.Position.Y / vp.Height;
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+
+            float originX = position.X / vp.Width;
+            float originY = position.Y / vp.Height;
 
             _originBuffer[i] = new Vector4(originX, originY, 0f, 0f);
 

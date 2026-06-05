@@ -24,6 +24,8 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public SpeedLinesLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -44,7 +46,8 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
         _whitePixel.SetData(new[] { Color.White });
     }
 
-    public void Trigger(Vector2 pixelPosition, Color color,
+    public void Trigger(Vector2 pixelPosition,
+        Color color,
         SpeedLinesMode linesMode = SpeedLinesMode.Expand,
         FadeMode fadeMode = FadeMode.FadeOut,
         FadeCurve fadeCurve = FadeCurve.Logarithmic,
@@ -81,9 +84,11 @@ public class SpeedLinesLayer : IOverlayLayer, IDisposable
 
         foreach (var inst in _instances)
         {
+            var position = PositionProvider?.Invoke(inst.PixelPosition) ?? inst.PixelPosition;
+
             var uvCenter = new Vector2(
-                inst.PixelPosition.X / vp.Width,
-                inst.PixelPosition.Y / vp.Height);
+                position.X / vp.Width,
+                position.Y / vp.Height);
 
             _pCenter.SetValue(uvCenter);
             _pLineColor.SetValue((inst.Color * inst.CurrentAlpha).ToVector4());

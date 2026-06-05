@@ -28,6 +28,8 @@ public class FrostLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public FrostLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -76,7 +78,9 @@ public class FrostLayer : IOverlayLayer, IDisposable
         float progress = MathHelper.Clamp(Timer.CurrentTime / _duration, 0f, 1f);
         var vp = _graphicsDevice.Viewport;
 
-        _pOrigin.SetValue(_origin);
+        var position = PositionProvider?.Invoke(_origin) ?? _origin;
+
+        _pOrigin.SetValue(position);
         _pTintColor.SetValue(_tintColor);
         _pRadius.SetValue(_radius);
         _pProgress.SetValue(progress);

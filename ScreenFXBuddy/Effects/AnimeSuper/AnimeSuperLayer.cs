@@ -20,6 +20,7 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
 
     public AnimeSuperLayer(GraphicsDevice graphicsDevice)
     {
@@ -38,9 +39,9 @@ public class AnimeSuperLayer : IOverlayLayer, IDisposable
     /// <param name="fadeOut">Seconds to fade from full alpha → 0.</param>
     public void Trigger(Color color, float flashIn = 0.05f, float hold = 0.30f, float fadeOut = 0.40f)
     {
-        _color   = color;
+        _color = color;
         _flashIn = flashIn;
-        _hold    = hold;
+        _hold = hold;
         _fadeOut = fadeOut;
 
         Timer.Start(flashIn + hold + fadeOut);

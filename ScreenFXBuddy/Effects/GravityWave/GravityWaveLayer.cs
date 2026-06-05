@@ -28,6 +28,8 @@ public class GravityWaveLayer : IDistortionLayer
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public GravityWaveLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -82,9 +84,11 @@ public class GravityWaveLayer : IDistortionLayer
         {
             var inst = _instances[i];
 
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+
             _originBuffer[i] = new Vector4(
-                inst.Position.X / vp.Width,
-                inst.Position.Y / vp.Height,
+                position.X / vp.Width,
+                position.Y / vp.Height,
                 0f, 0f);
 
             _stateBuffer[i] = new Vector4(

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using GameTimer;
+using System;
 
 namespace ScreenFXBuddy.Effects;
 
@@ -23,6 +24,8 @@ public class FreezeFrameLayer : IDistortionLayer
     private CountdownTimer Timer { get; set; } = new CountdownTimer();
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
+
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
 
     public FreezeFrameLayer(GraphicsDevice graphicsDevice)
     {

@@ -28,6 +28,8 @@ public interface IScreenFXService
     SmokeLayer Smoke { get; }
     GlassShatterLayer GlassShatter { get; }
 
+    Func<Vector2, Vector2> PositionProvider { get; set; }
+
     void TriggerForceRipple(
         Vector2 position,
         float strength = 0.05f,

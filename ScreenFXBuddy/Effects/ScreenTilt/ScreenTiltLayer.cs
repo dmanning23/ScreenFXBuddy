@@ -51,6 +51,8 @@ public class ScreenTiltLayer : IDistortionLayer
 
     private const float SnapFraction = 0.1f;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public ScreenTiltLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;

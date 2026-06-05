@@ -36,9 +36,12 @@ public class ChromaticAberrationLayer : IDistortionLayer
         ? !Timer.Paused && Timer.HasTimeRemaining
         : _splitAge < _splitDuration;
 
-    public ChromaticAberrationLayer(GraphicsDevice graphicsDevice)
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
+    public ChromaticAberrationLayer(GraphicsDevice graphicsDevice, Func<Vector2, Vector2> positionProvider)
     {
         _graphicsDevice = graphicsDevice;
+        PositionProvider = positionProvider;
     }
 
     public void LoadContent(ContentManager content)
@@ -49,7 +52,10 @@ public class ChromaticAberrationLayer : IDistortionLayer
     /// <param name="startPosition">Screen-pixel position the aberration radiates from.</param>
     /// <param name="distance">Max UV-space channel spread at end of effect. Try 0.05–0.2.</param>
     /// <param name="time">Duration in seconds.</param>4
-    public void Trigger(Vector2 startPosition, float distance = 1f, float time = 2f, FadeCurve fadeCurve = FadeCurve.Linear)
+    public void Trigger(Vector2 startPosition,
+        float distance = 1f,
+        float time = 2f,
+        FadeCurve fadeCurve = FadeCurve.Linear)
     {
         _startPosition = startPosition;
         _distance = distance;
@@ -92,9 +98,10 @@ public class ChromaticAberrationLayer : IDistortionLayer
         }
 
         var viewport = _graphicsDevice.Viewport;
+        var position = PositionProvider?.Invoke(_startPosition) ?? _startPosition;
         var originUV = new Vector2(
-            _startPosition.X / viewport.Width,
-            _startPosition.Y / viewport.Height);
+            position.X / viewport.Width,
+            position.Y / viewport.Height);
 
         float currentDistance, currentStrength;
 

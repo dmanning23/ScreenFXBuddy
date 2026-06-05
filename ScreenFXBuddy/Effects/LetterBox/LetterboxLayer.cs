@@ -20,6 +20,7 @@ public class LetterboxLayer : IOverlayLayer, IDisposable
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
 
     public LetterboxLayer(GraphicsDevice graphicsDevice)
     {

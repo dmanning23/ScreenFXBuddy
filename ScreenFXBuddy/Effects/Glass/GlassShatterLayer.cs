@@ -20,7 +20,7 @@ public class GlassShatterLayer : IDistortionLayer
 
     private Vector2 Position { get; set; }
     private float Strength { get; set; }
-    private int NumCells{ get; set; }
+    private int NumCells { get; set; }
     private float Seed { get; set; }
 
     //TODO: glass shatter needs fadeIn, hold, fadeOut
@@ -28,6 +28,8 @@ public class GlassShatterLayer : IDistortionLayer
     private CountdownTimer Timer { get; set; } = new CountdownTimer();
 
     public bool IsActive => !Timer.Paused && Timer.HasTimeRemaining;
+
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
 
     public GlassShatterLayer(GraphicsDevice graphicsDevice)
     {
@@ -74,7 +76,8 @@ public class GlassShatterLayer : IDistortionLayer
         float shatter = (float)Math.Sin(Timer.Lerp * Math.PI);
 
         var vp = _graphicsDevice.Viewport;
-        var originUV = new Vector2(Position.X / vp.Width, Position.Y / vp.Height);
+        var position = PositionProvider?.Invoke(Position) ?? Position;
+        var originUV = new Vector2(position.X / vp.Width, position.Y / vp.Height);
 
         _graphicsDevice.SetRenderTarget(destination);
 

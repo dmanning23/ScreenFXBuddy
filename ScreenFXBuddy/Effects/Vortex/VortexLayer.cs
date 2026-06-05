@@ -26,6 +26,8 @@ public class VortexLayer : IDistortionLayer
 
     public bool IsActive => _instances.Count > 0;
 
+    public Func<Vector2, Vector2> PositionProvider { get; set; }
+
     public VortexLayer(GraphicsDevice graphicsDevice)
     {
         _graphicsDevice = graphicsDevice;
@@ -87,9 +89,11 @@ public class VortexLayer : IDistortionLayer
         {
             var inst = _instances[i];
 
+            var position = PositionProvider?.Invoke(inst.Position) ?? inst.Position;
+
             _originBuffer[i] = new Vector4(
-                inst.Position.X / vp.Width,
-                inst.Position.Y / vp.Height,
+                position.X / vp.Width,
+                position.Y / vp.Height,
                 0f, 0f);
 
             _stateBuffer[i] = new Vector4(inst.SwirlAmount(), inst.Radius, 0f, 0f);
