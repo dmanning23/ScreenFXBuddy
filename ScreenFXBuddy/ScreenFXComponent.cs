@@ -9,7 +9,7 @@ using ScreenFXBuddy.Effects;
 
 namespace ScreenFXBuddy;
 
-public class ScreenFXComponent : IScreenFXService, IDisposable
+public class ScreenFXComponent : IScreenFXService
 {
     private Game Game { get; set; }
     private GraphicsDevice GraphicsDevice { get; set; }

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>ScreenFXBuddy</PackageId>
-    <Version>5.0.0</Version>
+    <Version>5.0.3</Version>
     <Title>ScreenFXBuddy</Title>
     <Authors>dmanning23</Authors>
     <description>Post-processing screen effects built for fighting games</description>

@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ScreenFXBuddy.Effects;
 using System;
+using GameTimer;
+using Microsoft.Xna.Framework.Content;
 
 namespace ScreenFXBuddy;
 
-public interface IScreenFXService
+public interface IScreenFXService : IDisposable
 {
     List<IDistortionLayer> DistortionLayers { get; }
     List<IOverlayLayer> OverlayLayers { get; }
@@ -29,6 +31,10 @@ public interface IScreenFXService
     GlassShatterLayer GlassShatter { get; }
 
     Func<Vector2, Vector2> PositionProvider { get; set; }
+
+    void LoadContent(ContentManager contentManager = null);
+
+    void Update(GameClock clock);
 
     void TriggerForceRipple(
         Vector2 position,
